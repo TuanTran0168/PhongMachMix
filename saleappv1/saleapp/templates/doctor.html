@@ -1,0 +1,33 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+{% if current_user.is_authenticated and current_user.user_role.__eq__("UserRole.DOCTOR") %}
+<head>
+    <link href="{{ url_for('static', filename='css/doctor.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+
+</head>
+
+<div class = "doctor row">
+    <div class="doctor-left col-md-4 col-sm-12text-center">
+        <img src="{{ current_user.avatar }}">
+
+        <div class="doctor-left-infor">
+            <h4>{{ current_user.name }}</h4>
+            <h4>{{ current_user.user_role }}</h4>
+            <h4>{{ current_user.birthday }}</h4>
+            <h4>ONLINE <i class="fas fa-toggle-on"></i> </h4>
+
+        </div>
+    </div>
+
+    <div class="doctor-right col-md-8 col-sm-12">
+        CHƯA LÀM GÌ
+    </div>
+</div>
+{% else %}
+<h1>GOOD</h1>
+{% endif %}
+
+{% endblock %}

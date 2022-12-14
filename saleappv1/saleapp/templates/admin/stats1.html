@@ -1,0 +1,54 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<h1 class="text-center text-success">THỐNG KÊ - BÁO CÁO THEO DOANH THU</h1>
+
+<div class="row">
+    <div style="height: 500px; overflow: auto; background-color: lightblue" class="col-md-5 col-sm-12">
+        <table class="table">
+            <tr>
+                <th>Ngày</th>
+                <th>Số lượt khám</th>
+                <th>Doanh thu</th>
+            </tr>
+            {% for sR in statsRevenue %}
+            <tr>
+
+                <td>{{ sR[0] }}</td>
+                <td>{{ sR[1] }}</td>
+                <td>{{ "{:,.0f}".format(sR[2]) }} VNĐ</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+    </div>
+    <div class="col-md-7 col-sm-12">
+        <form>
+            <div class="form-group">
+                <input type="month" placeholder="Nhập tháng" name="month" class="form-control"/>
+            </div>
+
+            <div>
+                <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
+            </div>
+        </form>
+        <canvas id="revenueStats"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+<script>
+let data = [], labels=[];
+  {% for sR in statsRevenue %}
+    data.push({{ sR[2] }})
+    labels.push('{{ sR[0] }}')
+  {% endfor %}
+  window.onload = function() {
+    drawRevenueStats(labels, data)
+  }
+
+
+</script>
+{% endblock %}

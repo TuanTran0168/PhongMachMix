@@ -1,0 +1,20 @@
+div.card {
+    background-color: #ffc107;
+    border: solid;
+}
+
+div.user-left {
+    border-right: solid;
+}
+
+div.user {
+    margin: 1%;
+}
+
+div.user-center {
+    border-right: solid;
+}
+
+div.content {
+    padding-top: 5%;
+}

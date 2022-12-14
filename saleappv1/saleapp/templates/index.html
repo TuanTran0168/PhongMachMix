@@ -1,0 +1,68 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+<head>
+    <link href="{{ url_for('static', filename='css/index_register_medical.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+
+   <div class="container-fluid">
+    <div class="user row">
+        <div class="user-left col-sm-3 bg-warning">
+            <div class="content">
+                <div class="user-center-img text-center">
+                    <img style="border-radius: 50%" src="{{ current_user.anhDaiDien }}"
+                         alt="{{ current_user.tenUser }}">
+                </div>
+                <div class="card-body text-center">
+                    <h4 class="card-title">{{ current_user.tenUser }}</h4>
+                    <h4 class="card-title">{{ current_user.user_role }}</h4>
+                    <h4 class="card-title">{{ current_user.ngaySinh }}</h4>
+                    <h4 style="color: blue">ONLINE <i class="fas fa-toggle-on"></i></h4>
+                </div>
+            </div>
+        </div>
+        <div class="user-center col-sm-4 bg-warning">
+            <div class="content">
+                <strong>LƯU Ý:</strong>
+                <p>Lịch khám có hiệu lực sau khi có xác nhận từ chính thức từ Hệ thống phòng mạch IMPROOK.</p>
+                <p>Quý khách sử dụng dịch vụ đặt lịch khám trực tuyến, xin vui lòng đặt trước ít nhất là 48 giờ
+                    trước khi đến khám.</p>
+                <p>Trong trường hợp khẩn cấp hoặc nghi ngờ có các triệu chứng nguy hiểm, quý khách vui lòng ĐẾN TRỰC
+                    TIẾP Phòng khám hoặc các trung tâm y tế gần nhất để kịp thời xử lý.</p>
+            </div>
+        </div>
+        <div class="user-right col-sm-5 bg-warning">
+            <div class="content">
+                <h2>ĐĂNG KÝ KHÁM BỆNH</h2>
+                <p>Quý khách vui lòng điền thông tin khám bệnh</p>
+                <div class="medical-register">
+                    <form method="post">
+
+                        <div class="form-floating mb-2 mt-2">
+                            <input type="date" class="form-control" name="date" required id="date">
+                            <label for="date">Chọn ngày khám</label>
+                        </div>
+
+                        <div class="form-floating mt-3 mb-3">
+                            <select class="form-select" required id="disease" name="disease">
+                                {% for d in diseases %}
+                                <option>{{ d.tenBenh }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="disease">Chọn bệnh</label>
+                        </div>
+
+
+                        <div class="form-floating mt-3 mb-3">
+                            <input type="submit" value="Gửi" class="btn btn-info"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
