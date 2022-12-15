@@ -1,5 +1,3 @@
-
-
 div.user-left {
     border-right: solid;
 }
@@ -22,8 +20,8 @@ div.user-center-img {
 }
 
 div.content > div.user-center-img > img {
-    width: 100%;
-    height: 100%;
+    width: 95%;
+    height: 95%;
 }
 
 div.register_medical {

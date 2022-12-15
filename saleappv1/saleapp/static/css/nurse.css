@@ -9,6 +9,7 @@ div.nurse {
 
 div.nurse-left {
     padding: 2%;
+    border-right: solid;
 }
 
 div.nurse-left img {
@@ -34,7 +35,7 @@ div.nurse-left-infor > h4:first-child {
    font-weight: bold;
 }
 
-div.nurse {
+div.nurse-right {
     padding: 2%;
 }
 
@@ -54,4 +55,19 @@ div.medical-date-1 {
 
 div.medical-date-2 {
     width: 48%;
+}
+
+div.schedule-form {
+    overflow: auto;
+    height: 380px;
+}
+
+div.confirm-info {
+    position: absolute;
+    top: 88%;
+    right: 8%;
+}
+
+.confirm-info {
+    display: none;
 }

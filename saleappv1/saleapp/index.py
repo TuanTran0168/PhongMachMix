@@ -24,10 +24,6 @@ def doctor():
 def nurse():
     return render_template("nurse.html")
 
-# @app.route("/cashier")
-# def cashier():
-#     return render_template("cashier.html")
-
 @app.route("/cashier", methods=['get', 'post'])
 def cashier():
     # xử lý

@@ -54,7 +54,7 @@ class User(BaseModel, UserMixin):
     tenUser = Column(String(50), nullable=False)
     tenDangNhap = Column(String(50), nullable=False, unique=True)
     matKhau = Column(String(50), nullable=False)
-    ngaySinh = Column(DateTime, default=datetime.now())
+    ngaySinh = Column(Date, default=datetime.now())
     gioiTinh = Column(Boolean, nullable=True)
     soDienThoai = Column(String(50), nullable=True)
     diaChi = Column(String(100), nullable=True)
@@ -72,7 +72,7 @@ class User(BaseModel, UserMixin):
 
 
 class HoaDon(BaseModel):
-    tenHoaDon = Column(String(50), nullable=False)
+    tenHoaDon = Column(String(50), default="Hóa đơn", nullable=False)
     # ngayKham = Column(DateTime, default=datetime.now())
     ngayKham = Column(Date, default= datetime.now())
     tongTien = Column(Float, nullable=True)
@@ -84,7 +84,7 @@ class HoaDon(BaseModel):
 
 class PhieuKham(BaseModel):
     tenPhieuKham = Column(String(50), nullable=False)
-    ngayKham = Column(DateTime, default=datetime.now())
+    ngayKham = Column(Date, default=datetime.now())
     trieuChung = Column(String(100), nullable=True)
     chuanDoan = Column(String(100), nullable=True)
     user_id = Column("User", ForeignKey(User.id), nullable=False)
@@ -100,8 +100,8 @@ class ChiTietPhieuKham(BaseModel):
 
 
 class DanhSachKham(BaseModel):
-    tenDanhSachKham = Column(String(50), nullable=True)
-    ngayKham = Column(DateTime, default=datetime.now())
+    tenDanhSachKham = Column(String(50), default="Danh sách khám ", nullable=True)
+    ngayKham = Column(Date, default=datetime.now())
 
     def __str__(self):
         return self.tenDanhSachKham
@@ -124,7 +124,7 @@ class Benh(BaseModel):
 
 
 class LichSuBenh(BaseModel):
-    tenLichSuBenh = Column(String(50), nullable=True)
+    tenLichSuBenh = Column(String(50), default="Lịch sử bệnh ", nullable=True)
     user_id = Column("User", ForeignKey(User.id), nullable=False)
     chiTietLichSuBenh = relationship("ChiTietLichSuBenh", backref="LichSuBenh", lazy=True)
 
@@ -190,8 +190,8 @@ if __name__ == '__main__':
         ctpk1_pk3 = ChiTietPhieuKham(soLuongThuoc=8, Thuoc_id=2, phieuKham_id=3)
         ctpk2_pk3 = ChiTietPhieuKham(soLuongThuoc=15, Thuoc_id=6, phieuKham_id=3)
 
-        ds1 = DanhSachKham(tenDanhSachKham="Danh sách 1")
-        ds2 = DanhSachKham(tenDanhSachKham="Danh sách 2")
+        ds1 = DanhSachKham()
+        ds2 = DanhSachKham()
 
         ctdsk1_ds1 = ChiTietDanhSachKham(danhSachKham_id=1, user_id="3")
         ctdsk2_ds1 = ChiTietDanhSachKham(danhSachKham_id=1, user_id="5")

@@ -210,7 +210,7 @@ def load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id):
     s = str(d)[5:10]
 
     query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung, PhieuKham.chuanDoan, PhieuKham.user_id)
-    # query = query.filter(PhieuKham.ngayKham.contains(s))
+    # query = query.filter(PhieuKham.ngayKham.contains(s)) #Chưa so sánh được ngày
     query = query.filter(PhieuKham.id.__eq__(phieuKham_id))
     return query.all()
 
@@ -223,6 +223,8 @@ def load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id):
 #         .join(ChiTietPhieuKham, ChiTietPhieuKham.phieuKham_id.__eq__(PhieuKham.id))\
 #
 #     return query.group_by(PhieuKham.id).order_by(PhieuKham.id).all()
+
+# def create_danh_sach_kham():
 
 
 def load_comments(product_id):

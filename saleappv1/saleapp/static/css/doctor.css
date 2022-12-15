@@ -9,6 +9,7 @@ div.doctor {
 
 div.doctor-left {
     padding: 2%;
+    border-right: solid;
 }
 
 div.doctor-left img {
@@ -34,7 +35,7 @@ div.doctor-left-infor > h4:first-child {
    font-weight: bold;
 }
 
-div.doctor {
+div.doctor-right {
     padding: 2%;
 }
 
@@ -43,15 +44,73 @@ div.doctor-right > canvas{
     margin: 0 10%;
 }
 
-div.medical-date {
+div.m-date {
     display: flex;
     align-items: center;
 }
 
-div.medical-date-1 {
-    width: 48%;
+div.m-date > label {
+    width: 100%;
+    text-align: left;
 }
 
-div.medical-date-2 {
-    width: 48%;
+div.m-date > div {
+    width: 280%;
+}
+
+div.m-diagnostic {
+    display: flex;
+    align-items: flex-end;
+}
+
+div.m-diagnostic > label {
+    width: 100%;
+    text-align: left;
+}
+
+div.m-diagnostic > input {
+    width: 255%;
+}
+
+div.m-name {
+    display: flex;
+    align-items: center;
+}
+
+div.m-name > label {
+    width: 100%;
+    text-align: left;
+}
+
+div.m-name > div {
+    width: 280%;
+}
+
+div.m-symptom {
+    display: flex;
+    align-items: center;
+}
+
+div.m-symptom > label {
+    width: 100%;
+    text-align: left;
+}
+
+div.m-symptom > input {
+    width: 255%;
+}
+
+div.noti-info {
+    position: absolute;
+    top: 88%;
+    right: 10%;
+}
+
+.noti-info {
+    display: none;
+}
+
+div.medicine-form {
+    overflow: auto;
+    height: 310px;
 }

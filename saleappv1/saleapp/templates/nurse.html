@@ -39,7 +39,8 @@
 
         <div class="nurse-right col-md-7 col-sm-12">
             <div>
-                <h1>DANH SÁCH KHÁM BỆNH</h1>
+                <h2>DANH SÁCH KHÁM BỆNH</h2>
+                <hr>
                 <div class="medical-date">
                     <div class="medical-date-1">
                         <h4>Ngày khám:</h4>
@@ -50,35 +51,43 @@
                     </div>
                 </div>
             </div>
-            <table class="table">
-                <tr>
-                    <th>Id</th>
-                    <th>Họ tên</th>
-                    <th>Giới tính</th>
-                    <th>Ngày sinh</th>
-                    <th>Địa chỉ</th>
-                </tr>
-                {% for us in users %}
-                <tr>
-                    <td>{{ us.id }}</td>
-                    <td>{{ us.tenUser }}</td>
-                    {% if us.gioiTinh == True %}
-                    <td>Nam</td>
-                    {% else %}
-                    <td>Nữ</td>
-                    {% endif %}
-                    <td>{{ us.ngaySinh }}</td>
-                    <td>{{ us.diaChi }}</td>
-                    <td>
-                        <input type="button" value="Xóa" class="btn btn-danger"/>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-            <div class="form-floating mt-3 mb-3">
+            <div class="schedule-form">
+                <table class="table">
+                    <tr>
+                        <th>Id</th>
+                        <th>Họ tên</th>
+                        <th>Giới tính</th>
+                        <th>Ngày sinh</th>
+                        <th>Địa chỉ</th>
+                    </tr>
+                    {% for us in users %}
+                    <tr>
+                        <td>{{ us.id }}</td>
+                        <td>{{ us.tenUser }}</td>
+                        {% if us.gioiTinh == True %}
+                        <td>Nam</td>
+                        {% else %}
+                        <td>Nữ</td>
+                        {% endif %}
+                        <td>{{ us.ngaySinh }}</td>
+                        <td>{{ us.diaChi }}</td>
+                        <td>
+                            <input type="button" value="Xóa" class="btn btn-danger"/>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="bt-confirm form-floating mt-3 mb-3">
                 <input type="submit" value="Xác nhận" class="btn btn-success"/>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="confirm-click">
+    <div class="confirm-info alert alert-success">
+        Xác nhận danh sách <strong>thành công &#10004</strong>
     </div>
 </div>
 
