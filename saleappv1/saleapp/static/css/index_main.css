@@ -1,0 +1,29 @@
+div.index {
+    text-align: center;
+}
+
+div.index > div.index-content > img {
+    margin-bottom: -20px;
+}
+
+div.service-left {
+    display: flex;
+    justify-content: space-around;
+}
+
+div.service-left img {
+    width: 100%;
+    margin: auto 0;
+}
+
+div.service-left-1 {
+    width: 45%;
+    height: 300px;
+    background-color: green;
+}
+
+div.service-left-2 {
+    width: 45%  ;
+    height: 300px;
+    background-color: red;
+}

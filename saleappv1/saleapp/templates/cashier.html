@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<head>
+    <link href="{{ url_for('static', filename='css/cashier.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+<h1 class=cashier>THANH TOÁN HÓA ĐƠN</h1>
+
+<!--action là đường dẫn của cái hàm thực thi-->
+<form method="post" enctype="multipart/form-data" action="/cashier">
+    <div class="">
+        <input type="text" class="form-control" required id="submit_phieuKham_id"
+               placeholder="Nhập mã phiếu khám của bệnh nhân..."
+               name="submit_phieuKham_id">
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-md-12 bg-info">
+        HOÁ ĐƠN THANH TOÁN
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-6 bg-warning">
+        Họ tên
+    </div>
+    <div class="col-md-6 col-md-6 bg-light">
+        Ngày khám
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 bg-success">
+        tiền khám
+    </div>
+    <div class="col-md-6 bg-warning">
+        tiền thuốc
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 bg-info">
+        tổng tiền
+    </div>
+</div>
+
+{% endblock %}
