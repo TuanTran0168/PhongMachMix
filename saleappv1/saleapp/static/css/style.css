@@ -3,5 +3,25 @@
 }
 
 body {
-    background-color: lightblue;
+    background-color: #e6e6e6;
+}
+
+nav.all-header {
+    background-color: black;
+}
+
+ul.navbar-nav {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+ul.navbar-nav > li.nav-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: bold;
+}
+
+div.container-fluid > a.navbar-brand{
+    font-weight: bold;
 }

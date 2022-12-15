@@ -11,6 +11,9 @@ def load_diseases():
 def load_categories():
     return DanhMucThuoc.query.all()
 
+def load_users():
+    return User.query.all()
+
 
 def load_products(danhMucThuoc_id=None, kw=None):
     query = Thuoc.query.filter(Thuoc.trangThai.__eq__(True))
@@ -189,6 +192,11 @@ def bill_for_one_user_by_id(user_id):
 
     return query.group_by(User.id, PhieuKham.id).first()
 
+def save_bill_for_user(tenHoaDon, ngayKham, tongTien, user_id):
+    b = HoaDon(tenHoaDon = tenHoaDon, ngayKham = ngayKham, tongTien = tongTien, user_id = user_id)
+    db.session.add(b)
+    db.session.commit()
+
 def load_medical_form_today():
     d = datetime.now()
     s = str(d)[5:10]
@@ -202,7 +210,8 @@ def load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id):
     s = str(d)[5:10]
 
     query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung, PhieuKham.chuanDoan, PhieuKham.user_id)
-    query = query.filter(PhieuKham.ngayKham.contains(s), PhieuKham.id.__eq__(phieuKham_id))
+    # query = query.filter(PhieuKham.ngayKham.contains(s))
+    query = query.filter(PhieuKham.id.__eq__(phieuKham_id))
     return query.all()
 
 # return User.query.filter(User.tenDangNhap.__eq__(username.strip()),
@@ -238,10 +247,12 @@ if __name__ == '__main__':
         # b = stats_by_revenue()
         # print(type(b[0][2]))
 
-        print(bill())
-        print(load_medical_form_today())
-        print(bill_for_one_user_by_id("5"))
-        print(load_medical_form_for_one_user_today_by_phieuKham_id("1"))
+        # print(bill())
+        # print(load_medical_form_today())
+        # print(bill_for_one_user_by_id("5"))
+        a = load_medical_form_for_one_user_today_by_phieuKham_id(1)
+        print(a[0][5])
+        print(a)
         # a = stats_by_medic()
         #
         # print(type(int(a[0][3])))

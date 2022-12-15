@@ -1,7 +1,4 @@
-div.card {
-    background-color: #ffc107;
-    border: solid;
-}
+
 
 div.user-left {
     border-right: solid;
@@ -17,4 +14,18 @@ div.user-center {
 
 div.content {
     padding-top: 5%;
+}
+
+div.user-center-img {
+    width: 285px;
+    height: 370px;
+}
+
+div.content > div.user-center-img > img {
+    width: 100%;
+    height: 100%;
+}
+
+div.register_medical {
+    background-color: lightslategrey;
 }

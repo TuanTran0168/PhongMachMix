@@ -4,14 +4,17 @@
 
 <head>
     <link href="{{ url_for('static', filename='css/index_register_medical.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/index_main.css') }}" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
 </head>
 
-   <div class="container-fluid">
+
+<div class="register_medical container-fluid">
+    {% if current_user.is_authenticated %}
     <div class="user row">
-        <div class="user-left col-sm-3 bg-warning">
+        <div class="user-left col-sm-3">
             <div class="content">
-                <div class="user-center-img text-center">
+                <div class="user-center-img">
                     <img style="border-radius: 50%" src="{{ current_user.anhDaiDien }}"
                          alt="{{ current_user.tenUser }}">
                 </div>
@@ -23,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <div class="user-center col-sm-4 bg-warning">
+        <div class="user-center col-sm-4">
             <div class="content">
                 <strong>LƯU Ý:</strong>
                 <p>Lịch khám có hiệu lực sau khi có xác nhận từ chính thức từ Hệ thống phòng mạch IMPROOK.</p>
@@ -33,7 +36,7 @@
                     TIẾP Phòng khám hoặc các trung tâm y tế gần nhất để kịp thời xử lý.</p>
             </div>
         </div>
-        <div class="user-right col-sm-5 bg-warning">
+        <div class="user-right col-sm-5">
             <div class="content">
                 <h2>ĐĂNG KÝ KHÁM BỆNH</h2>
                 <p>Quý khách vui lòng điền thông tin khám bệnh</p>
@@ -51,7 +54,7 @@
                                 <option>{{ d.tenBenh }}</option>
                                 {% endfor %}
                             </select>
-                            <label for="disease">Chọn bệnh</label>
+                            <label for="disease">Bạn đang muốn khám bệnh gì?</label>
                         </div>
 
 
@@ -63,6 +66,34 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <div class="index">
+        <div class="index-content">
+            <img src="static/picture/IMPROOK.png" style="width: 34%" alt="IMPROOK"/>
+            <h3>Chào mừng bạn đến với hệ thống phòng mạch I'MPROOK</h3>
+            <h4>Hệ thống phòng mạch hàng đầu tại Việt Nam</h4>
+        </div>
+
+        <div class="container-fluid">
+            <div class="service row">
+                <div class="service-left col-sm-6 bg-primary">
+                    <div class="service-left-1">
+                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg" alt="">
+                    </div>
+                    <div class="service-left-2">
+                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg" alt="">
+                    </div>
+                </div>
+                <div class="service-right col-sm-6 bg-dark">
+                    <p>Sed ut perspiciatis...</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-context">
+            <h2>Tại sao lại chọn chúng tôi?</h2>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

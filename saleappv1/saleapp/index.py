@@ -1,4 +1,4 @@
-from flask import session, render_template
+from flask import session, render_template, request, redirect
 from saleapp import app, dao, admin, login, utils, controllers
 
 
@@ -20,12 +20,16 @@ app.add_url_rule('/api/products/<int:product_id>/comments', 'add-comment', contr
 def doctor():
     return render_template("doctor.html")
 
-@app.route("/cashier")
-def cashier():
-    return render_template("cashier.html")
+@app.route("/nurse")
+def nurse():
+    return render_template("nurse.html")
+
+# @app.route("/cashier")
+# def cashier():
+#     return render_template("cashier.html")
 
 @app.route("/cashier", methods=['get', 'post'])
-def search_phieuKham_id():
+def cashier():
     # xử lý
     err_msg = ''
     # nhập id của phieuKham
@@ -38,8 +42,8 @@ def search_phieuKham_id():
         #         bill_cua_user = dao.bill_for_one_user_by_id(pk[5])
         #         dao.save_bill_for_user(pk[1], pk[2], bill_cua_user[0], pk[5])
         phieu_kham = dao.load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id)
-        bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[5])
-        dao.save_bill_for_user(phieu_kham[1], phieu_kham[2], bill_cua_user[0], phieu_kham[5])
+        bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
+        dao.save_bill_for_user(phieu_kham[0][1], phieu_kham[0][2], bill_cua_user[4], phieu_kham[0][5])
         return redirect('/cashier')
 
     return render_template("cashier.html", err_msg=err_msg)

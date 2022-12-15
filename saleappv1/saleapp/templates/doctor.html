@@ -2,30 +2,100 @@
 
 {% block content %}
 
-{% if current_user.is_authenticated and current_user.user_role.__eq__("UserRole.DOCTOR") %}
+{% if current_user.is_authenticated and current_user.user_role.__eq__("UserRole.Doctor") %}
 <head>
     <link href="{{ url_for('static', filename='css/doctor.css') }}" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
 
 </head>
 
-<div class = "doctor row">
-    <div class="doctor-left col-md-4 col-sm-12text-center">
-        <img src="{{ current_user.avatar }}">
+<div class="content">
+    <div class="doctor row">
+        <div class="doctor-left col-md-4 col-sm-12 text-center">
 
-        <div class="doctor-left-infor">
-            <h4>{{ current_user.name }}</h4>
-            <h4>{{ current_user.user_role }}</h4>
-            <h4>{{ current_user.birthday }}</h4>
-            <h4>ONLINE <i class="fas fa-toggle-on"></i> </h4>
+            <div class="doctor-left-infor">
+                <table class="table">
+                    <tr>
+                        <th>Id</th>
+                        <th>Họ tên</th>
+                    </tr>
+                    {% for us in users %}
+                    <tr>
+                        <td>{{ us.id }}</td>
+                        <td>{{ us.tenUser }}</td>
+                        <td>
+                            <input type="button" value="Tạo phiếu" class="btn btn-success"/>
+                        </td>
+                    </tr>
+                    {% endfor %}
 
+                </table>
+            </div>
+        </div>
+
+        <div class="doctor-right col-md-8 col-sm-12">
+            <div>
+                <h1>PHIẾU KHÁM BỆNH</h1>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6 bg-primary">
+                            <p>Họ tên
+                            <div>Lưu Quang Phương</div>
+                            </p>
+                            <div class="mb-3 mt-3">
+                                <label for="symptom" class="form-label">Triệu chứng:</label>
+                                <input type="text" class="form-control" id="symptom" placeholder="Nhập triệu chứng"
+                                       name="symptom">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 bg-light">
+                            <p>Ngày khám:
+                            <div class="form-floating mb-2 mt-2">
+                                <input type="date" class="form-control" name="date" required id="date">
+                                <label for="date">Chọn ngày khám</label>
+                            </div>
+                            </p>
+                            <div class="mb-3 mt-3">
+                                <label for="diagnostic" class="form-label">Chuẩn đoán:</label>
+                                <input type="text" class="form-control" id="diagnostic" placeholder="Nhập chuẩn đoán"
+                                       name="diagnostic">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>Id</th>
+                    <th>Họ tên</th>
+                    <th>Giới tính</th>
+                    <th>Ngày sinh</th>
+                    <th>Địa chỉ</th>
+                </tr>
+                {% for us in users %}
+                <tr>
+                    <td>{{ us.id }}</td>
+                    <td>{{ us.tenUser }}</td>
+                    {% if us.gioiTinh == True %}
+                    <td>Nam</td>
+                    {% else %}
+                    <td>Nữ</td>
+                    {% endif %}
+                    <td>{{ us.ngaySinh }}</td>
+                    <td>{{ us.diaChi }}</td>
+                    <td>
+                        <input type="button" value="Xóa" class="btn btn-danger"/>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="form-floating mt-3 mb-3 text-center">
+                <input type="submit" value="Lưu" class="btn btn-warning"/>
+            </div>
         </div>
     </div>
-
-    <div class="doctor-right col-md-8 col-sm-12">
-        CHƯA LÀM GÌ
-    </div>
 </div>
+
 {% else %}
 <h1>GOOD</h1>
 {% endif %}

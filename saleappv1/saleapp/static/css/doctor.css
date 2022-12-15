@@ -1,11 +1,14 @@
+div.content {
+    margin-top: 2%
+}
+
 div.doctor {
     text-align: center;
     border: solid;
 }
 
 div.doctor-left {
-    border-right: solid;
-    background-color: lightslategrey;
+    padding: 2%;
 }
 
 div.doctor-left img {
@@ -15,8 +18,8 @@ div.doctor-left img {
 }
 
 div.doctor-left-infor {
-    margin: 10%;
-    padding: 5%;
+    margin: 2%;
+    padding: 1%;
     background-color: #e6e6e6;
     border-radius: 5%;
 
@@ -31,7 +34,24 @@ div.doctor-left-infor > h4:first-child {
    font-weight: bold;
 }
 
+div.doctor {
+    padding: 2%;
+}
+
 div.doctor-right > canvas{
     display: block;
     margin: 0 10%;
+}
+
+div.medical-date {
+    display: flex;
+    align-items: center;
+}
+
+div.medical-date-1 {
+    width: 48%;
+}
+
+div.medical-date-2 {
+    width: 48%;
 }
