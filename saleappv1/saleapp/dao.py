@@ -8,7 +8,6 @@ import hashlib
 def load_diseases():
     return Benh.query.all()
 
-
 def load_categories():
     return DanhMucThuoc.query.all()
 
@@ -74,12 +73,6 @@ def count_user_by_role(userRoleStats):
                 if r1.__eq__(r2):
                     count = count + 1
     return count
-
-    # return db.session.query(User.tenUser, func.count(User.user_role == UserRole.USER),
-    #                         func.count(User.user_role == UserRole.CASHIER), \
-    #                         func.count(User.user_role == UserRole.NURSE), \
-    #                         func.count(User.user_role == UserRole.DOCTOR), \
-    #                         func.count(User.user_role == UserRole.ADMIN)).group_by(User.tenUser).all()
 
 
 def count_user():
@@ -168,6 +161,60 @@ def stats_by_revenue(month=None):
 
     return query.group_by(HoaDon.ngayKham).all()
 
+#Bản gốc của tính hóa đơn
+# def bill():
+#     query = db.session.query(PhieuKham.id,func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc) ) \
+#         .join(PhieuKham, PhieuKham.id.__eq__(ChiTietPhieuKham.phieuKham_id))\
+#         .join(Thuoc, Thuoc.id.__eq__(ChiTietPhieuKham.Thuoc_id))
+#
+#     return query.group_by(PhieuKham.id).order_by(PhieuKham.id).all()
+
+
+#Bản mới của tính hóa đơn (Xịn hơn, Xài cái này) | Bill này tính toàn bộ bill luôn
+def bill():
+    query = db.session.query(User.id, User.tenUser, PhieuKham.id, PhieuKham.user_id, func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc) ) \
+        .join(PhieuKham, PhieuKham.id.__eq__(ChiTietPhieuKham.phieuKham_id))\
+        .join(Thuoc, Thuoc.id.__eq__(ChiTietPhieuKham.Thuoc_id))\
+        .join(User, User.id.__eq__(PhieuKham.user_id))
+
+    return query.group_by(User.id, PhieuKham.id).order_by(User.id, PhieuKham.id).all()
+
+def bill_for_one_user_by_id(user_id):
+    query = db.session.query(User.id, User.tenUser, PhieuKham.id, PhieuKham.user_id, func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc) ) \
+        .join(PhieuKham, PhieuKham.id.__eq__(ChiTietPhieuKham.phieuKham_id))\
+        .join(Thuoc, Thuoc.id.__eq__(ChiTietPhieuKham.Thuoc_id))\
+        .join(User, User.id.__eq__(PhieuKham.user_id))
+
+    query = query.filter(User.id.__eq__(user_id))
+
+    return query.group_by(User.id, PhieuKham.id).first()
+
+def load_medical_form_today():
+    d = datetime.now()
+    s = str(d)[5:10]
+
+    query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung, PhieuKham.chuanDoan, PhieuKham.user_id)
+    query = query.filter(PhieuKham.ngayKham.contains(s))
+    return query.all()
+
+def load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id):
+    d = datetime.now()
+    s = str(d)[5:10]
+
+    query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung, PhieuKham.chuanDoan, PhieuKham.user_id)
+    query = query.filter(PhieuKham.ngayKham.contains(s), PhieuKham.id.__eq__(phieuKham_id))
+    return query.all()
+
+# return User.query.filter(User.tenDangNhap.__eq__(username.strip()),
+#                              User.matKhau.__eq__(password)).first()
+
+# def bill():
+#     query = db.session.query(PhieuKham.id, func.sum(func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc))) \
+#         .join(ChiTietPhieuKham, ChiTietPhieuKham.Thuoc_id.__eq__(Thuoc.id)) \
+#         .join(ChiTietPhieuKham, ChiTietPhieuKham.phieuKham_id.__eq__(PhieuKham.id))\
+#
+#     return query.group_by(PhieuKham.id).order_by(PhieuKham.id).all()
+
 
 def load_comments(product_id):
     return Comment.query.filter(Comment.product_id.__eq__(product_id)).order_by(-Comment.id).all()
@@ -185,12 +232,19 @@ if __name__ == '__main__':
     from saleapp import app
 
     with app.app_context():
-        print(stats_by_medic())
-        print(count_user())
-        print(stats_by_revenue())
-        a = stats_by_medic()
+        # print(stats_by_medic())
+        # print(count_user())
+        # print(stats_by_revenue())
+        # b = stats_by_revenue()
+        # print(type(b[0][2]))
 
-        print(type(int(a[0][3])))
+        print(bill())
+        print(load_medical_form_today())
+        print(bill_for_one_user_by_id("5"))
+        print(load_medical_form_for_one_user_today_by_phieuKham_id("1"))
+        # a = stats_by_medic()
+        #
+        # print(type(int(a[0][3])))
         # print(count_user_by_role(UserRole.USER))
         # print(count_user_by_role(UserRole.ADMIN))
         # print(count_user_by_role(UserRole.DOCTOR))

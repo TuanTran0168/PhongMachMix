@@ -51,7 +51,7 @@ def logout_my_user():
 def register():
     err_msg = ''
     if request.method == 'POST':
-        password = request.form['password'] #id cua html
+        password = request.form['password'] #name cua html
         confirm = request.form['confirm']
         if password.__eq__(confirm):
             avatar = ''

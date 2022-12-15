@@ -1,10 +1,16 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<h1 style = "margin: 2%; color: black" class="text-center">THỐNG KÊ - BÁO CÁO SỬ DỤNG THUỐC</h1>
 
-<div class="row">
-    <div style = "height: 600px; overflow: auto; background-color: lightblue" class="col-md-5 col-sm-12">
+<head>
+    <link href="{{ url_for('static', filename='css/stats.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+
+<h2 class="statTitle">THỐNG KÊ - BÁO CÁO SỬ DỤNG THUỐC</h2>
+
+<div class="stats row">
+    <div style="height: 550px; overflow: auto" class="stats-left col-md-5 col-sm-12">
         <table class="table">
 
             <tr>
@@ -26,18 +32,20 @@
 
         </table>
     </div>
-    <div class="col-md-7 col-sm-12">
+    <div class="stats-right col-md-7 col-sm-12">
         <form>
             <div class="form-group">
-                <input type="text" placeholder="Nhập từ khóa" name="kw" class="form-control"/>
+                <input type="text" placeholder="Nhập tên thuốc" name="kw" class="form-control"/>
             </div>
-            <div class="form-group">
-                <label>Từ ngày</label>
-                <input type="date" name="from_date" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <label>Đến ngày</label>
-                <input type="date" name="to_date" class="form-control"/>
+            <div style = "display: flex; justify-content: space-between">
+                <div style="width: 45%" class="form-group">
+                    <label>Từ ngày</label>
+                    <input type="date" name="from_date" class="form-control"/>
+                </div>
+                <div style="width: 45%" class="form-group">
+                    <label>Đến ngày</label>
+                    <input type="date" name="to_date" class="form-control"/>
+                </div>
             </div>
             <div>
                 <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
@@ -58,6 +66,7 @@ let data = [], labels=[];
   window.onload = function() {
     drawMedicineStats(labels, data)
   }
+
 
 </script>
 {% endblock %}

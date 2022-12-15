@@ -20,6 +20,30 @@ app.add_url_rule('/api/products/<int:product_id>/comments', 'add-comment', contr
 def doctor():
     return render_template("doctor.html")
 
+@app.route("/cashier")
+def cashier():
+    return render_template("cashier.html")
+
+@app.route("/cashier", methods=['get', 'post'])
+def search_phieuKham_id():
+    # xử lý
+    err_msg = ''
+    # nhập id của phieuKham
+    if request.method == ('POST'):
+        phieuKham_id = request.form['submit_phieuKham_id']
+        # truy vấn user ở db lên
+        # list_phieu_kham = dao.load_medical_form_today()
+        # for pk in list_phieu_kham:
+        #     if phieuKham_id.__eq__(pk[0]):
+        #         bill_cua_user = dao.bill_for_one_user_by_id(pk[5])
+        #         dao.save_bill_for_user(pk[1], pk[2], bill_cua_user[0], pk[5])
+        phieu_kham = dao.load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id)
+        bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[5])
+        dao.save_bill_for_user(phieu_kham[1], phieu_kham[2], bill_cua_user[0], phieu_kham[5])
+        return redirect('/cashier')
+
+    return render_template("cashier.html", err_msg=err_msg)
+
 @login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
