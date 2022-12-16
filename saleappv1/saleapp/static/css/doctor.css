@@ -75,6 +75,7 @@ div.m-diagnostic > input {
 div.m-name {
     display: flex;
     align-items: center;
+    height: 74px;
 }
 
 div.m-name > label {
@@ -84,6 +85,8 @@ div.m-name > label {
 
 div.m-name > div {
     width: 280%;
+    background-color: white;
+    padding: 2%
 }
 
 div.m-symptom {
@@ -113,4 +116,32 @@ div.noti-info {
 div.medicine-form {
     overflow: auto;
     height: 310px;
+}
+
+div.m-medicine {
+    display: flex;
+    align-items: center;
+}
+
+div.m-medicine > label {
+    width: 100%;
+    text-align: left;
+}
+
+div.m-medicine > input {
+    width: 255%;
+}
+
+div.m-user {
+    display: flex;
+    align-items: flex-end;
+}
+
+div.m-user > label {
+    width: 115%;
+    text-align: left;
+}
+
+div.m-user > input {
+    width: 245%;
 }

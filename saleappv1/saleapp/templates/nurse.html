@@ -6,40 +6,58 @@
 <head>
     <link href="{{ url_for('static', filename='css/nurse.css') }}" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
-
 </head>
 
 
 <div class="content">
     <div class="nurse row">
-        <div class="nurse-left col-md-5 col-sm-12 text-center">
-
+        <div class="nurse-left col-md-4 col-sm-12 text-center">
             <div class="nurse-left-infor">
-                <table class="table">
-                    <tr>
-                        <th>Id</th>
-                        <th>Họ tên</th>
-                        <th>Số điện thoại</th>
-                        <th>Thêm</th>
-                    </tr>
-                    {% for us in users %}
-                    <tr>
-                        <td>{{ us.id }}</td>
-                        <td>{{ us.tenUser }}</td>
-                        <td>{{ us.soDienThoai}}</td>
-                        <td>
-                            <input type="button" value="Thêm" class="btn btn-success"/>
-                        </td>
-                    </tr>
-                    {% endfor %}
-
-                </table>
+                <div class="sub-content">
+                    <div class="user-center-img">
+                        <img style="border-radius: 50%" src="{{ current_user.anhDaiDien }}"
+                             alt="{{ current_user.tenUser }}">
+                    </div>
+                    <div class="card-body text-center">
+                        <h5>{{ current_user.tenUser }}</h5>
+                        <h5>{{ current_user.user_role }}</h5>
+                        <h5 style="color: blue">ONLINE <i class="fas fa-toggle-on"></i></h5>
+                    </div>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="/create_danh_sach_kham_for_nurse">
+                    <div class="bt-create form-floating mb-3">
+                        <input type="submit" value="Tạo danh sách" class="btn btn-info" required id="create_list"
+                               name="create_list"/>
+                    </div>
+                    <div class="table-danh-sach-kham ">
+                        <table class="table">
+                            <tr>
+                                <th>Id</th>
+                                <th>Tên danh sách</th>
+                                <th>Ngày tạo</th>
+                            </tr>
+                            {% if danh_sach_kham %}
+                            {% for ds in danh_sach_kham %}
+                            <tr>
+                                <td>{{ ds.id }}</td>
+                                <td>{{ ds.tenDanhSachKham }}</td>
+                                <td>{{ ds.ngayKham }}</td>
+                            </tr>
+                            {% endfor %}
+                            {%else%}
+                            <tr>
+                                <td>{{ err_msg }}</td>
+                            </tr>
+                            {%endif%}
+                        </table>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div class="nurse-right col-md-7 col-sm-12">
+        <div class="nurse-right col-md-8 col-sm-12">
             <div>
-                <h2>DANH SÁCH KHÁM BỆNH</h2>
+                <h2>DANH SÁCH ĐĂNG KÝ KHÁM BỆNH</h2>
                 <hr>
                 <div class="medical-date">
                     <div class="medical-date-1">
@@ -52,39 +70,43 @@
                 </div>
             </div>
             <div class="schedule-form">
-                <table class="table">
-                    <tr>
-                        <th>Id</th>
-                        <th>Họ tên</th>
-                        <th>Giới tính</th>
-                        <th>Ngày sinh</th>
-                        <th>Địa chỉ</th>
-                    </tr>
-                    {% for us in users %}
-                    <tr>
-                        <td>{{ us.id }}</td>
-                        <td>{{ us.tenUser }}</td>
-                        {% if us.gioiTinh == True %}
-                        <td>Nam</td>
-                        {% else %}
-                        <td>Nữ</td>
-                        {% endif %}
-                        <td>{{ us.ngaySinh }}</td>
-                        <td>{{ us.diaChi }}</td>
-                        <td>
-                            <input type="button" value="Xóa" class="btn btn-danger"/>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <form method="post" enctype="multipart/form-data" action="/save_chi_tiet_danh_sach_kham">
+                    <div class = "chi-tiet-danh-sach-kham">
+                        <table class="table">
+                            <tr>
+                                <th>Mã bệnh nhân</th>
+                                <th>Họ tên</th>
+                                <th>Giới tính</th>
+                                <th>Ngày sinh</th>
+                                <th>SĐT</th>
+                                <th>Địa chỉ</th>
+                            </tr>
+                            {% for us in get_user_in_danh_sach_kham %}
+                            <tr>
+                                <td>{{ us[0][0] }}</td>
+                                <td>{{ us[0][1] }}</td>
+                                {% if us[0][2] == True %}
+                                <td>Nam</td>
+                                {% else %}
+                                <td>Nữ</td>
+                                {% endif %}
+                                <td>{{ us[0][3] }}</td>
+                                 <td>{{ us[0][5] }}</td>
+                                <td>{{ us[0][4] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="bt-confirm form-floating mt-3 mb-3">
+                        <input type="submit" value="Xác nhận" class="btn btn-success" required id="save_chi_tiet_dsk"
+                               name="save_chi_tiet_dsk"/>
+                    </div>
+                </form>
             </div>
-            <div class="bt-confirm form-floating mt-3 mb-3">
-                <input type="submit" value="Xác nhận" class="btn btn-success"/>
-            </div>
+
         </div>
     </div>
 </div>
-
 <div class="confirm-click">
     <div class="confirm-info alert alert-success">
         Xác nhận danh sách <strong>thành công &#10004</strong>

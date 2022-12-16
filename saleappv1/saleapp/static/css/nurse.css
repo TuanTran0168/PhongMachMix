@@ -2,6 +2,10 @@ div.content {
     margin-top: 2%
 }
 
+div.sub-content {
+    display: flex;
+}
+
 div.nurse {
     text-align: center;
     border: solid;
@@ -57,7 +61,7 @@ div.medical-date-2 {
     width: 48%;
 }
 
-div.schedule-form {
+div.chi-tiet-danh-sach-kham {
     overflow: auto;
     height: 380px;
 }
@@ -70,4 +74,14 @@ div.confirm-info {
 
 .confirm-info {
     display: none;
+}
+
+div.user-center-img > img {
+    margin-top: 0;
+    margin-bottom: 20%;
+}
+
+div.table-danh-sach-kham {
+    height: 340px;
+    overflow: auto;
 }

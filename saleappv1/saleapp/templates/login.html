@@ -1,6 +1,22 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
+<head>
+    <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"/>
+</head>
+
+<div class="header">
+    <div class="header-img">
+        <img src="static/picture/LogoIcon.png" alt="I'MPROOK"/>
+    </div>
+    <div class="header-title">
+        <h4 class="text-center">Hệ thống phòng mạch</h4>
+        <h2 class="text-center text-danger">I'MPROOK</h2>
+    </div>
+</div>
+<hr>
+
 <h1 class="text-center text-success">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
 
 {% if err_msg %}
@@ -21,6 +37,10 @@
         <label for="password">Mật khẩu</label>
     </div>
 
+    <!--    Forget password-->
+    <div class="form-floating mt-3 mb-3">
+            <a href="#" class="text-primary">Quên mật khẩu?</a>
+    </div>
 
     <div class="form-floating mt-3 mb-3">
         <input type="submit" value="Đăng nhập" class="btn btn-danger" />

@@ -41,25 +41,14 @@
                 <h2>ĐĂNG KÝ KHÁM BỆNH</h2>
                 <p>Quý khách vui lòng điền thông tin khám bệnh</p>
                 <div class="medical-register">
-                    <form method="post">
-
+                    <form method="post" enctype="multipart/form-data" action="user_dang_ky_kham">
                         <div class="form-floating mb-2 mt-2">
-                            <input type="date" class="form-control" name="date" required id="date">
-                            <label for="date">Chọn ngày khám</label>
+                            <input type="text" class="form-control" required id="user_dang_ky_kham"
+                                   name="user_dang_ky_kham">
+                            <label for="user_dang_ky_kham">Nhập số điện thoại của bạn</label>
                         </div>
-
                         <div class="form-floating mt-3 mb-3">
-                            <select class="form-select" required id="disease" name="disease">
-                                {% for d in diseases %}
-                                <option>{{ d.tenBenh }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="disease">Bạn đang muốn khám bệnh gì?</label>
-                        </div>
-
-
-                        <div class="form-floating mt-3 mb-3">
-                            <input type="submit" value="Gửi" class="btn btn-info"/>
+                            <input type="submit" value="Đăng ký khám" class="btn btn-info"/>
                         </div>
                     </form>
                 </div>
@@ -78,10 +67,12 @@
             <div class="service row">
                 <div class="service-left col-sm-6 bg-primary">
                     <div class="service-left-1">
-                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg" alt="">
+                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg"
+                             alt="">
                     </div>
                     <div class="service-left-2">
-                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg" alt="">
+                        <img src="https://www.umcclinic.com.vn/Data/Sites/1/News/210/1goi-kham-suc-khoe-tong-quat-chuyen-sau.jpg"
+                             alt="">
                     </div>
                 </div>
                 <div class="service-right col-sm-6 bg-dark">

@@ -11,7 +11,34 @@
 <div class="content">
     <div class="doctor row">
         <div class="doctor-left col-md-4 col-sm-12 text-center">
-
+            <div class="mb-3 mt-3">
+                <div>
+                    <h4>Tra cứu bệnh nhân</h4>
+                </div>
+                <div class="m-user mb-3 mt-3">
+                    <label for="u-id" class="lb-id form-label">Mã bệnh nhân:</label>
+                    <input type="text" class="form-control" id="u-id" placeholder="Nhập mã bệnh nhân" name="u-id">
+                </div>
+                <button class="bt-add btn btn-primary" type="submit">Thêm</button>
+            </div>
+            <hr>
+            <div class="mb-3 mt-3">
+                <div class="mb-3 mt-3">
+                    <div>
+                        <h4>Tra cứu thuốc</h4>
+                    </div>
+                    <div class="m-medicine mb-3 mt-3">
+                        <label class="form-label">Nhập thuốc:</label>
+                        <input class="form-control" list="medicines" name="medicine" id="medicine">
+                        <datalist id="medicines">
+                            {% for d in diseases %}
+                            <option value="{{ d.tenBenh }}">
+                                {% endfor %}
+                        </datalist>
+                    </div>
+                    <button class="bt-new btn btn-secondary" type="submit">Thêm</button>
+                </div>
+            </div>
         </div>
 
         <div class="doctor-right col-md-8 col-sm-12">
@@ -20,10 +47,10 @@
                 <hr>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-sm-6 bg-primary">
+                        <div class="col-sm-6 bg-info">
                             <div class="m-name">
                                 <label for="symptom" class="form-label">Họ tên:</label>
-                                <div>Lưu Quang Phương</div>
+                                <div class="u-name">Lưu Quang Phương</div>
                             </div>
                             <div class="mb-3 mt-3">
                                 <div class="m-symptom">
@@ -48,7 +75,7 @@
                                     <datalist id="diseases">
                                         {% for d in diseases %}
                                         <option value="{{ d.tenBenh }}">
-                                        {% endfor %}
+                                            {% endfor %}
                                     </datalist>
                                 </div>
                             </div>
@@ -56,6 +83,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="medicine-form">
                 <table class="table">
                     <tr>
@@ -74,7 +102,10 @@
                         {% else %}
                         <td>Nữ</td>
                         {% endif %}
-                        <td>{{ us.ngaySinh }}</td>
+                        <td>
+                            <input type="number" min="0" value="{{ c.quantity }}"
+                                   class="form-control"/>
+                        </td>
                         <td>{{ us.diaChi }}</td>
                         <td>
                             <input type="button" value="Xóa" class="btn btn-danger"/>

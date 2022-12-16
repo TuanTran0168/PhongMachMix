@@ -1,5 +1,8 @@
 <nav class="all-header navbar navbar-expand-sm navbar-dark">
     <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="static/picture/LogoIcon.png" style="width: 50px" alt="I'MPROOK"/>
+        </a>
         <a class="navbar-brand" href="#">PHÒNG MẠCH TƯ</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -9,11 +12,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Trang chủ</a>
                 </li>
-<!--                {% for cate in categories %}-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="/?category_id={{ cate.id }}">{{ cate.name }}</a>-->
-<!--                </li>-->
-<!--                {% endfor %}-->
 
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
@@ -27,6 +25,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-success" href="/doctor">Lập phiếu khám</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-success" href="#">Xem lịch sử bệnh</a>
                 </li>
                  <li class="nav-item">
                     <a class="nav-link text-success" href="/cashier">Thanh toán hóa đơn</a>
@@ -42,15 +43,8 @@
                     <a class="nav-link text-danger" href="/register">Đăng ký</a>
                 </li>
                 {% endif %}
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link text-secondary" href="/cart">&#128722; Giỏ hàng <span class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a>-->
-<!--                </li>-->
 
             </ul>
-<!--            <form class="d-flex" action="/">-->
-<!--                <input class="form-control me-2" name="keyword" type="text" placeholder="Nhập từ khóa...">-->
-<!--                <button class="btn btn-primary" type="submit">Tìm</button>-->
-<!--            </form>-->
         </div>
     </div>
 </nav>
