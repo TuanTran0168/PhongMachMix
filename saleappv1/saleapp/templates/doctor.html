@@ -10,48 +10,65 @@
 
 <div class="content">
     <div class="doctor row">
+
         <div class="doctor-left col-md-4 col-sm-12 text-center">
-            <div class="mb-3 mt-3">
-                <div>
-                    <h4>Tra cứu bệnh nhân</h4>
-                </div>
-                <div class="m-user mb-3 mt-3">
-                    <label for="u-id" class="lb-id form-label">Mã bệnh nhân:</label>
-                    <input type="text" class="form-control" id="u-id" placeholder="Nhập mã bệnh nhân" name="u-id">
-                </div>
-                <button class="bt-add btn btn-primary" type="submit">Thêm</button>
-            </div>
-            <hr>
-            <div class="mb-3 mt-3">
+            <form method="post" enctype="multipart/form-data" action="/doctor_get_user_by_user_id">
                 <div class="mb-3 mt-3">
                     <div>
-                        <h4>Tra cứu thuốc</h4>
+                        <h4 style ="font-weight:bold">Tra cứu bệnh nhân</h4>
+                        <p>
+                            Nhớ nhập lại mã bệnh nhân sau khi thêm thuốc cho bệnh nhân đó
+                        </p>
                     </div>
-                    <div class="m-medicine mb-3 mt-3">
-                        <label class="form-label">Nhập thuốc:</label>
-                        <input class="form-control" list="medicines" name="medicine" id="medicine">
-                        <datalist id="medicines">
-                            {% for d in diseases %}
-                            <option value="{{ d.tenBenh }}">
-                                {% endfor %}
-                        </datalist>
+
+                    <div class="m-user mb-3 mt-3">
+                        <label for="u-id" class="lb-id form-label">Mã bệnh nhân:</label>
+                        <input type="text" class="form-control" id="doctor_get_user_by_user_id"
+                               placeholder="Nhập mã bệnh nhân" name="doctor_get_user_by_user_id">
                     </div>
-                    <button class="bt-new btn btn-secondary" type="submit">Thêm</button>
                 </div>
-            </div>
+                <hr>
+                <div class="mb-3 mt-3">
+                    <div class="mb-3 mt-3">
+                        <div>
+                            <h4 style ="font-weight:bold">Tra cứu thuốc</h4>
+                        </div>
+                        <div class="m-medicine mb-3 mt-3">
+                            <label class="form-label">Nhập thuốc:</label>
+                            <input class="form-control" list="medicines" name="medicine" id="medicine">
+                            <datalist id="medicines">
+                                {% for t in medicines %}
+                                <option value="{{ t.tenThuoc }}">
+                                    {% endfor %}
+                            </datalist>
+                        </div>
+                        <div class="m-quantity mb-2 mt-2">
+                            <label class="form-label">Số lượng:</label>
+                            <input type="number" min="1" value="1" class="form-control" name = "so_luong_thuoc" />
+                        </div>
+                    </div>
+                    <button class="bt-add btn btn-primary" type="submit">Thêm</button>
+                </div>
+            </form>
         </div>
 
+
         <div class="doctor-right col-md-8 col-sm-12">
+
             <div>
                 <h2>PHIẾU KHÁM BỆNH</h2>
                 <hr>
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-sm-6 bg-info">
-                            <div class="m-name">
-                                <label for="symptom" class="form-label">Họ tên:</label>
-                                <div class="u-name">Lưu Quang Phương</div>
-                            </div>
+                        <div class="col-sm-6">
+
+<!--                            <div class="m-name">-->
+<!--                                <label for="symptom" class="form-label">Họ tên:</label>-->
+<!--                                {%for u in user_in_phieu_kham%}-->
+<!--                                <div class="u-name">{{u[0][1]}}</div>-->
+<!--                                {%endfor%}-->
+<!--                            </div>-->
+
                             <div class="mb-3 mt-3">
                                 <div class="m-symptom">
                                     <label for="symptom" class="form-label">Triệu chứng:</label>
@@ -60,23 +77,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 bg-light">
-                            <div class="m-date">
-                                <label for="date" class="form-label">Ngày khám:</label>
-                                <div class="form-floating mb-2 mt-2">
-                                    <input type="date" class="form-control" name="date" required id="date">
-                                    <label for="date">Chọn ngày khám</label>
-                                </div>
-                            </div>
+                        <div class="col-sm-6 ">
+<!--                            <div class="m-date">-->
+<!--                                <label for="date" class="form-label">Ngày khám:</label>-->
+<!--                                <div class="form-floating mb-2 mt-2">-->
+<!--                                    <input type="date" class="form-control" name="date" required id="date">-->
+<!--                                    <label for="date">Chọn ngày khám</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="mb-3 mt-3">
                                 <div class="m-diagnostic">
                                     <label class="form-label">Chuẩn đoán:</label>
-                                    <input class="form-control" list="diseases" name="disease" id="disease">
-                                    <datalist id="diseases">
-                                        {% for d in diseases %}
-                                        <option value="{{ d.tenBenh }}">
-                                            {% endfor %}
-                                    </datalist>
+                                    <input type="text" class="form-control" id="diagnostic"
+                                           placeholder="Nhập chuẩn đoán"
+                                           name="diagnostic">
                                 </div>
                             </div>
                         </div>
@@ -84,32 +98,26 @@
                 </div>
             </div>
 
+
             <div class="medicine-form">
                 <table class="table">
                     <tr>
                         <th>Id</th>
+
                         <th>Thuốc</th>
                         <th>Đơn vị</th>
                         <th>Số lượng</th>
                         <th>Cách dùng</th>
+                          <th>Id phiếu khám</th>
                     </tr>
-                    {% for us in users %}
+                    {% for t in thuoc_trong_ctpk %}
                     <tr>
-                        <td>{{ us.id }}</td>
-                        <td>{{ us.tenUser }}</td>
-                        {% if us.gioiTinh == True %}
-                        <td>Nam</td>
-                        {% else %}
-                        <td>Nữ</td>
-                        {% endif %}
-                        <td>
-                            <input type="number" min="0" value="{{ c.quantity }}"
-                                   class="form-control"/>
-                        </td>
-                        <td>{{ us.diaChi }}</td>
-                        <td>
-                            <input type="button" value="Xóa" class="btn btn-danger"/>
-                        </td>
+                        <td>{{ t.id }}</td>
+                        <td>{{ t.tenThuoc }}</td>
+                        <td>{{ t.donViThuoc }}</td>
+                        <td>{{ t.soLuongThuoc }}</td>
+                        <td>{{ t.moTa }}</td>
+                        <td>{{ t.phieuKham_id }}</td>
                     </tr>
                     {% endfor %}
                 </table>

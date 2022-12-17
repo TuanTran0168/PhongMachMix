@@ -83,7 +83,7 @@ class HoaDon(BaseModel):
 
 
 class PhieuKham(BaseModel):
-    tenPhieuKham = Column(String(50), nullable=False)
+    tenPhieuKham = Column(String(50), default="Phiếu khám", nullable=False)
     ngayKham = Column(Date, default=datetime.now())
     trieuChung = Column(String(100), nullable=True)
     chuanDoan = Column(String(100), nullable=True)
@@ -169,12 +169,12 @@ if __name__ == '__main__':
         dmt2 = DanhMucThuoc(tenDanhMuc="Thuốc viên")
         dmt3 = DanhMucThuoc(tenDanhMuc="Thuốc bột")
 
-        t1 = Thuoc(tenThuoc="Paracetammol", giaThuoc=50000, donViThuoc="Viên", moTa="Hi", danhMucThuoc_id=2)
-        t2 = Thuoc(tenThuoc="Vitamin C", giaThuoc=10000, donViThuoc="Viên", moTa="Hi", danhMucThuoc_id=2)
-        t3 = Thuoc(tenThuoc="Y", giaThuoc=5000, donViThuoc="Milli", moTa="Hi", danhMucThuoc_id=1)
-        t4 = Thuoc(tenThuoc="Sensacool", giaThuoc=20000, donViThuoc="Gói", moTa="Hi", danhMucThuoc_id=3)
-        t5 = Thuoc(tenThuoc="Adrenaline", giaThuoc=30000, donViThuoc="Gói", moTa="Hi", danhMucThuoc_id=3)
-        t6 = Thuoc(tenThuoc="Men Vi Sinh", giaThuoc=15000, donViThuoc="Gói", moTa="Hi", danhMucThuoc_id=3)
+        t1 = Thuoc(tenThuoc="Paracetammol", giaThuoc=50000, donViThuoc="Viên", moTa="Uống", danhMucThuoc_id=2)
+        t2 = Thuoc(tenThuoc="Vitamin C", giaThuoc=10000, donViThuoc="Viên", moTa="Uống", danhMucThuoc_id=2)
+        t3 = Thuoc(tenThuoc="Y", giaThuoc=5000, donViThuoc="Milli", moTa="Uống", danhMucThuoc_id=1)
+        t4 = Thuoc(tenThuoc="Sensacool", giaThuoc=20000, donViThuoc="Gói", moTa="Uống", danhMucThuoc_id=3)
+        t5 = Thuoc(tenThuoc="Adrenaline", giaThuoc=30000, donViThuoc="Gói", moTa="Uống", danhMucThuoc_id=3)
+        t6 = Thuoc(tenThuoc="Men Vi Sinh", giaThuoc=15000, donViThuoc="Gói", moTa="Uống", danhMucThuoc_id=3)
 
         pk1 = PhieuKham(tenPhieuKham="Phiếu 1", trieuChung="Đau bụng", chuanDoan="Loét dạ dày", user_id=5)
         pk2 = PhieuKham(tenPhieuKham="Phiếu 2", trieuChung="Đau lưng", chuanDoan="Thoái hóa đốt sống", user_id=3)
@@ -226,12 +226,12 @@ if __name__ == '__main__':
         db.session.add_all([dmt1, dmt2, dmt3])
         db.session.add_all([t1, t2, t3, t4, t5, t6])
         db.session.add_all([b1, b2, b3, b4, b5])
-        db.session.add_all([pk1, pk2, pk3])
-        db.session.add_all([ctpk1_pk1, ctpk2_pk1, ctpk3_pk1, ctpk1_pk2, ctpk2_pk2, ctpk1_pk3, ctpk2_pk3])
-        db.session.add_all([ds1, ds2])
-        db.session.add_all([ctdsk1_ds1, ctdsk2_ds1, ctdsk1_ds2])
-        db.session.add_all([lsb1, lsb2, lsb3])
-        db.session.add_all([ctlsb1_lsb1, ctlsb2_lsb1, ctlsb3_lsb1, ctlsb1_lsb2, ctlsb2_lsb2, ctlsb1_lsb3])
-        db.session.add_all([hd1, hd2, hd3, hd4, hd5, hd6, hd7, hd8])
+        # db.session.add_all([pk1, pk2, pk3])
+        # db.session.add_all([ctpk1_pk1, ctpk2_pk1, ctpk3_pk1, ctpk1_pk2, ctpk2_pk2, ctpk1_pk3, ctpk2_pk3])
+        # db.session.add_all([ds1, ds2])
+        # db.session.add_all([ctdsk1_ds1, ctdsk2_ds1, ctdsk1_ds2])
+        # db.session.add_all([lsb1, lsb2, lsb3])
+        # db.session.add_all([ctlsb1_lsb1, ctlsb2_lsb1, ctlsb3_lsb1, ctlsb1_lsb2, ctlsb2_lsb2, ctlsb1_lsb3])
+        # db.session.add_all([hd1, hd2, hd3, hd4, hd5, hd6, hd7, hd8])
 
         db.session.commit()
