@@ -26,6 +26,11 @@ def nurse():
     return render_template("nurse.html")
 
 
+@app.route("/lich_su_benh")
+def lich_su_benh():
+    return render_template("lich_su_benh.html")
+
+
 @app.route("/user_dang_ky_kham", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 def user_dang_ky_kham():
     err_msg = ''
@@ -35,12 +40,20 @@ def user_dang_ky_kham():
         benh_nhan = dao.load_users_by_phone_number(SDT_dang_ky_kham)
         if benh_nhan:
             benh_nhan_da_dang_ky = dao.load_chi_tiet_danh_sach_kham_today(benh_nhan[0][0])
+
+            # Nếu bệnh nhân có lịch sử bệnh rồi thì khôg tạo nữa
+            # load lịch sử bệnh lên kiểm tra bằng id user
             if benh_nhan_da_dang_ky:
                 err_msg = "Bạn đã đăng ký rồi"
             else:
                 ngay_kham = dao.load_danh_sach_kham_by_today()
                 if ngay_kham:
                     dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
+                    lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
+                    if lsb_for_one_user:
+                        err_msg = "Lịch sử bệnh đã tồn tại"
+                    else:
+                        dao.create_lich_su_benh(user_id=benh_nhan[0][0])
                 else:
                     err_msg = "Chưa có danh sách để đăng ký"
         else:
@@ -87,6 +100,8 @@ def save_chi_tiet_danh_sach_kham():  # cái action của form sẽ có tên như
 
 # bản gốc
 user_id_in_phieu_kham = ""
+
+
 @app.route("/doctor_get_user_by_user_id", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như này
     err_msg = ''
@@ -104,12 +119,12 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
                 if thuoc:
                     dao.save_chi_tiet_phieu_kham(so_luong_thuoc=so_luong_thuoc, thuoc_id=thuoc[0][0],
                                                  phieu_kham_id=pk_today_for_one_user[0][0])
-
                     # return so_luong_thuoc
                     return redirect("/doctor")
             else:
                 err_msg = "Bệnh nhân này không có phiếu khám"
     return render_template("doctor.html", err_msg=err_msg)
+
 
 @app.context_processor
 def load_thuoc_trong_chi_tiet_pk():
@@ -117,6 +132,24 @@ def load_thuoc_trong_chi_tiet_pk():
     return {
         'thuoc_trong_ctpk': thuoc_trong_ctpk
     }
+
+
+# Hàm này lưu luôn lịch sử bệnh
+@app.route("/doctor_save_phieu_kham", methods=['get', 'post'])
+def doctor_save_phieu_kham():
+    err_msg = ''
+    if request.method == ('POST'):
+        phieu_kham_id = request.form["ma_phieu_kham"]
+        trieu_chung = request.form["trieu_chung"]
+        chuan_doan = request.form["chuan_doan"]
+
+        dao.update_phieu_kham(phieu_kham_id=phieu_kham_id, trieu_chung=trieu_chung, chuan_doan=chuan_doan)
+        benh_id = dao.load_benh_id_by_ten_benh(chuan_doan)
+        lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id)
+
+        dao.save_chi_tiet_lich_su_benh(lich_su_benh_id=lsb_id[0][0], benh_id=benh_id[0][0])
+    return render_template("doctor.html", err_msg=err_msg)
+
 
 # @app.route("/doctor_get_user_by_user_id", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 # def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như này
@@ -156,7 +189,7 @@ def cashier():
         phieuKham_id = request.form['submit_phieuKham_id']
         phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
         bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
-        dao.save_bill_for_user(phieu_kham[0][1], phieu_kham[0][2], bill_cua_user[4], phieu_kham[0][5])
+        dao.save_bill_for_user(phieu_kham[0][2], bill_cua_user[4], phieu_kham[0][5])
         return redirect('/cashier')
 
     return render_template("cashier.html", err_msg=err_msg)
@@ -174,6 +207,7 @@ def common_attribute():
         'categories': categories,
         'cart': utils.cart_stats(session.get(app.config['CART_KEY']))
     }
+
 
 @app.context_processor
 def get_disease():

@@ -1,0 +1,11 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+{% if current_user.is_authenticated and current_user.user_role.__eq__("UserRole.Doctor") %}
+
+{% else %}
+<h1>GOOD</h1>
+{% endif %}
+
+{% endblock %}

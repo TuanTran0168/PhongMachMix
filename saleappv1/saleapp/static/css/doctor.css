@@ -159,3 +159,18 @@ div.m-quantity > label {
 div.m-quantity > input {
     width: 320%;
 }
+
+div.m-phieukham-id {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+div.m-phieukham-id > label {
+    width: 40%;
+    text-align: center;
+}
+
+div.m-phieukham-id > input {
+    width: 40%;
+}

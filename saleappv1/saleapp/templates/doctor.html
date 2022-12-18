@@ -10,14 +10,16 @@
 
 <div class="content">
     <div class="doctor row">
-
         <div class="doctor-left col-md-4 col-sm-12 text-center">
             <form method="post" enctype="multipart/form-data" action="/doctor_get_user_by_user_id">
                 <div class="mb-3 mt-3">
                     <div>
-                        <h4 style ="font-weight:bold">Tra cứu bệnh nhân</h4>
+                        <h4 style="font-weight:bold">Tra cứu bệnh nhân</h4>
                         <p>
                             Nhớ nhập lại mã bệnh nhân sau khi thêm thuốc cho bệnh nhân đó
+                            <br>
+                            <br>
+                            Nếu nhập sai thì vui lòng bảo bệnh nhân đừng thanh toán và ra đăng ký khám lại vào hôm sau
                         </p>
                     </div>
 
@@ -31,7 +33,7 @@
                 <div class="mb-3 mt-3">
                     <div class="mb-3 mt-3">
                         <div>
-                            <h4 style ="font-weight:bold">Tra cứu thuốc</h4>
+                            <h4 style="font-weight:bold">Tra cứu thuốc</h4>
                         </div>
                         <div class="m-medicine mb-3 mt-3">
                             <label class="form-label">Nhập thuốc:</label>
@@ -44,7 +46,7 @@
                         </div>
                         <div class="m-quantity mb-2 mt-2">
                             <label class="form-label">Số lượng:</label>
-                            <input type="number" min="1" value="1" class="form-control" name = "so_luong_thuoc" />
+                            <input type="number" min="1" value="1" class="form-control" name="so_luong_thuoc"/>
                         </div>
                     </div>
                     <button class="bt-add btn btn-primary" type="submit">Thêm</button>
@@ -54,77 +56,81 @@
 
 
         <div class="doctor-right col-md-8 col-sm-12">
-
-            <div>
-                <h2>PHIẾU KHÁM BỆNH</h2>
-                <hr>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-
-<!--                            <div class="m-name">-->
-<!--                                <label for="symptom" class="form-label">Họ tên:</label>-->
-<!--                                {%for u in user_in_phieu_kham%}-->
-<!--                                <div class="u-name">{{u[0][1]}}</div>-->
-<!--                                {%endfor%}-->
-<!--                            </div>-->
-
-                            <div class="mb-3 mt-3">
-                                <div class="m-symptom">
-                                    <label for="symptom" class="form-label">Triệu chứng:</label>
-                                    <input type="text" class="form-control" id="symptom" placeholder="Nhập triệu chứng"
-                                           name="symptom">
+            <form method="post" enctype="multipart/form-data" action="/doctor_save_phieu_kham">
+                <div>
+                    <h2 style="font-weight: bold">PHIẾU KHÁM BỆNH</h2>
+                    <p>
+                        Nhớ nhập lại mã phiếu khám sau khi lưu phiếu cho bệnh nhân
+                        <br>
+                        <br>
+                        Nếu nhập sai thì vui lòng bảo bệnh nhân đừng thanh toán và ra đăng ký khám lại vào hôm sau
+                    </p>
+                    <hr>
+                    <div class="container-fluid">
+                        <div class="m-phieukham-id mb-3 mt-3">
+                            <label for="phieukham-id" class="lb-id form-label">Mã phiếu khám:</label>
+                            <input type="text" class="form-control" id="ma_phieu_kham"
+                                   placeholder="Nhập mã phiếu khám" name="ma_phieu_kham">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="mb-3 mt-3">
+                                    <div class="m-symptom">
+                                        <label for="symptom" class="form-label">Triệu chứng:</label>
+                                        <input type="text" class="form-control" id="trieu_chung"
+                                               placeholder="Nhập triệu chứng"
+                                               name="trieu_chung">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6 ">
-<!--                            <div class="m-date">-->
-<!--                                <label for="date" class="form-label">Ngày khám:</label>-->
-<!--                                <div class="form-floating mb-2 mt-2">-->
-<!--                                    <input type="date" class="form-control" name="date" required id="date">-->
-<!--                                    <label for="date">Chọn ngày khám</label>-->
-<!--                                </div>-->
-<!--                            </div>-->
-                            <div class="mb-3 mt-3">
-                                <div class="m-diagnostic">
-                                    <label class="form-label">Chuẩn đoán:</label>
-                                    <input type="text" class="form-control" id="diagnostic"
-                                           placeholder="Nhập chuẩn đoán"
-                                           name="diagnostic">
+                            <div class="col-sm-6 ">
+                                <div class="mb-3 mt-3">
+                                    <div class="m-diagnostic">
+                                        <label class="form-label">Chuẩn đoán:</label>
+                                        <input class="form-control" list="diseases" name="chuan_doan" id="chuan_doan">
+                                        <datalist id="diseases">
+                                            {% for d in diseases %}
+                                            <option value="{{ d.tenBenh }}">
+                                                {% endfor %}
+                                        </datalist>
+                                        <!--                                        <label class="form-label">Chuẩn đoán:</label>-->
+                                        <!--                                        <input type="text" class="form-control" id="chuan_doan"-->
+                                        <!--                                               placeholder="Nhập chuẩn đoán"-->
+                                        <!--                                               name="chuan_doan">-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div class="medicine-form">
+                    <table class="table">
+                        <tr>
+                            <th>Id</th>
 
-            <div class="medicine-form">
-                <table class="table">
-                    <tr>
-                        <th>Id</th>
-
-                        <th>Thuốc</th>
-                        <th>Đơn vị</th>
-                        <th>Số lượng</th>
-                        <th>Cách dùng</th>
-                          <th>Id phiếu khám</th>
-                    </tr>
-                    {% for t in thuoc_trong_ctpk %}
-                    <tr>
-                        <td>{{ t.id }}</td>
-                        <td>{{ t.tenThuoc }}</td>
-                        <td>{{ t.donViThuoc }}</td>
-                        <td>{{ t.soLuongThuoc }}</td>
-                        <td>{{ t.moTa }}</td>
-                        <td>{{ t.phieuKham_id }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div class="bt-save form-floating mt-3 mb-3 text-center">
-                <input type="submit" value="Lưu" class="btn btn-warning"/>
-            </div>
+                            <th>Thuốc</th>
+                            <th>Đơn vị</th>
+                            <th>Số lượng</th>
+                            <th>Cách dùng</th>
+                            <th>Id phiếu khám</th>
+                        </tr>
+                        {% for t in thuoc_trong_ctpk %}
+                        <tr>
+                            <td>{{ t.id }}</td>
+                            <td>{{ t.tenThuoc }}</td>
+                            <td>{{ t.donViThuoc }}</td>
+                            <td>{{ t.soLuongThuoc }}</td>
+                            <td>{{ t.moTa }}</td>
+                            <td>{{ t.phieuKham_id }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="bt-save form-floating mt-3 mb-3 text-center">
+                    <input type="submit" value="Lưu" class="btn btn-warning"/>
+                </div>
+            </form>
         </div>
     </div>
 </div>

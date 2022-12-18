@@ -208,8 +208,8 @@ def bill_for_one_user_by_id(user_id):
     return query.group_by(User.id, PhieuKham.id).first()
 
 
-def save_bill_for_user(tenHoaDon, ngayKham, tongTien, user_id):
-    b = HoaDon(tenHoaDon=tenHoaDon, ngayKham=ngayKham, tongTien=tongTien, user_id=user_id)
+def save_bill_for_user(ngayKham, tongTien, user_id):
+    b = HoaDon(ngayKham=ngayKham, tongTien=tongTien, user_id=user_id)
     db.session.add(b)
     db.session.commit()
 
@@ -257,6 +257,7 @@ def load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id):
 def load_danh_sach_kham():
     return db.session.query(DanhSachKham.id, DanhSachKham.tenDanhSachKham, DanhSachKham.ngayKham).all()
 
+
 def create_danh_sach_kham(create):
     if create.__eq__("Tạo danh sách"):
         dsk = DanhSachKham(ngayKham=datetime.now())
@@ -277,9 +278,10 @@ def save_chi_tiet_danh_sach_kham(danh_sach_kham_id, user_id):
     db.session.add(ctdsk)
     db.session.commit()
 
-def load_chi_tiet_danh_sach_kham_today(user_id = None):
-    query = db.session.query(ChiTietDanhSachKham.id, ChiTietDanhSachKham.danhSachKham_id, ChiTietDanhSachKham.user_id)\
-            .join(DanhSachKham, DanhSachKham.id.__eq__(ChiTietDanhSachKham.danhSachKham_id))
+
+def load_chi_tiet_danh_sach_kham_today(user_id=None):
+    query = db.session.query(ChiTietDanhSachKham.id, ChiTietDanhSachKham.danhSachKham_id, ChiTietDanhSachKham.user_id) \
+        .join(DanhSachKham, DanhSachKham.id.__eq__(ChiTietDanhSachKham.danhSachKham_id))
     today = datetime.now()
     todayString = str(today)[0:10]
     query = query.filter(DanhSachKham.ngayKham.__eq__(todayString))
@@ -430,6 +432,20 @@ def load_phieu_kham(user_id=None):
     return query.all()
 
 
+def load_phieu_kham_today_by_phieu_kham_id(phieu_kham_id=None):
+    query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung,
+                             PhieuKham.chuanDoan, PhieuKham.user_id, User.tenUser).join(User, User.id.__eq__(
+        PhieuKham.user_id))
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(PhieuKham.ngayKham.__eq__(todayString))
+
+    if phieu_kham_id:
+        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+
+    return query.all()
+
+
 # ====================================================================================
 def load_medicines():
     return Thuoc.query.all()
@@ -450,6 +466,27 @@ def save_chi_tiet_phieu_kham(so_luong_thuoc=None, thuoc_id=None, phieu_kham_id=N
     db.session.commit()
 
 
+def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
+    query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung,
+                             PhieuKham.chuanDoan, PhieuKham.user_id)
+
+    if phieu_kham_id:
+        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+        query.trieuChung = trieu_chung
+        query.chuanDoan = chuan_doan
+
+    db.session.commit()
+    return query.all()
+
+
+def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
+    phieu_kham = PhieuKham.query.filter_by(id=phieu_kham_id).first()
+    phieu_kham.trieuChung = trieu_chung
+    phieu_kham.chuanDoan = chuan_doan
+
+    db.session.commit()
+
+
 def load_thuoc_in_chi_tiet_phieu_kham_today(user_id=None):
     query = db.session.query(Thuoc.id, Thuoc.tenThuoc, Thuoc.donViThuoc, ChiTietPhieuKham.soLuongThuoc, Thuoc.moTa,
                              ChiTietPhieuKham.phieuKham_id) \
@@ -466,6 +503,43 @@ def load_thuoc_in_chi_tiet_phieu_kham_today(user_id=None):
     return query.all()
 
 
+# ====================================================================================
+
+def create_lich_su_benh(user_id):
+    lsb = LichSuBenh(user_id=user_id)
+    db.session.add(lsb)
+    db.session.commit()
+
+def load_lich_su_benh(user_id=None):
+    query = db.session.query(LichSuBenh.id, LichSuBenh.tenLichSuBenh, LichSuBenh.user_id)
+
+    if user_id:
+        query = query.filter(LichSuBenh.user_id.__eq__(user_id))
+
+    return query.all()
+
+def save_chi_tiet_lich_su_benh(lich_su_benh_id = None, benh_id = None):
+    lsb = ChiTietLichSuBenh(lichSuBenh_id = lich_su_benh_id, benh_id = benh_id)
+    db.session.add(lsb)
+    db.session.commit()
+
+def load_benh_id_by_ten_benh(ten_benh = None):
+    query = db.session.query(Benh.id)
+
+    if ten_benh:
+        query = query.filter(Benh.tenBenh.__eq__(ten_benh))
+
+    return query.all()
+
+def load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id =None):
+    query = db.session.query(LichSuBenh.id) \
+            .join(User, User.id.__eq__(LichSuBenh.user_id))\
+            .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))\
+
+    if phieu_kham_id:
+        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+
+    return query.group_by(LichSuBenh.id).all()
 # ====================================================================================
 
 if __name__ == '__main__':
@@ -500,6 +574,11 @@ if __name__ == '__main__':
             user_in_phieu_kham = load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
             print(user_in_phieu_kham)
 
-        print(pk_today_for_one_user[0][0])
+        # print(pk_today_for_one_user[0][0])
         print(load_thuoc_in_chi_tiet_phieu_kham_today(1))
         print(load_chi_tiet_danh_sach_kham_today(1))
+        print(load_phieu_kham_today_by_phieu_kham_id(2))
+        print(load_phieu_kham_today_by_phieu_kham_id(1))
+        print(load_lich_su_benh(1))
+
+        print(load_benh_id_by_ten_benh("Đau bụng")[0][0])
