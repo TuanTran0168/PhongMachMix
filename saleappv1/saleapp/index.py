@@ -91,14 +91,18 @@ def save_chi_tiet_danh_sach_kham():  # cái action của form sẽ có tên như
         dsk = dao.load_DSK_today()
         if dsk:
             chi_tiet_dsk = dao.load_chi_tiet_DSK_today(dsk[0][0])
-            n = len(chi_tiet_dsk)
-            for i in range(0, n):
-                pk_today_for_one_user = dao.load_phieu_kham(user_id=chi_tiet_dsk[i][2])
-                if pk_today_for_one_user:
-                    err_msg = "Đã tạo phiếu cho user này rồi"
-                else:
-                    pk = dao.create_phieu_kham_auto(user_id=chi_tiet_dsk[i][2])
-                    err_msg = "Tạo thành công phiếu khám"
+            if chi_tiet_dsk:
+                n = len(chi_tiet_dsk)
+                for i in range(0, n):
+                    pk_today_for_one_user = dao.load_phieu_kham(user_id=chi_tiet_dsk[i][2])
+                    if pk_today_for_one_user:
+                        err_msg = "Đã tạo phiếu cho user này rồi"
+                    else:
+                        pk = dao.create_phieu_kham_auto(user_id=chi_tiet_dsk[i][2])
+                        err_msg = "Tạo thành công phiếu khám"
+            else:
+                err_msg = "Chưa có bệnh nhân nào đăng ký khám"
+
 
         save_chi_tiet_dsk = request.form['save_chi_tiet_dsk']  # Lấy này test coi bấm đc k
 
