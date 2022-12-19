@@ -51,6 +51,11 @@
                     </div>
                     <button class="bt-add btn btn-primary" type="submit">Thêm</button>
                 </div>
+                {% if err_msg %}
+                <div class="alert alert-danger">
+                    {{ err_msg }}
+                </div>
+                {% endif %}
             </form>
         </div>
 
@@ -90,7 +95,7 @@
                                         <select class="form-select" name="chuan_doan" id="diseases">
                                             {% for d in diseases %}
                                             <option>{{ d.tenBenh }}</option>
-                                                {% endfor %}
+                                            {% endfor %}
                                         </select>
                                     </div>
                                 </div>
@@ -111,7 +116,7 @@
                         </tr>
                         {% for t in thuoc_trong_ctpk %}
                         <tr>
-                             <td>{{ t.phieuKham_id }}</td>
+                            <td>{{ t.phieuKham_id }}</td>
                             <td>{{ t.id }}</td>
                             <td>{{ t.tenThuoc }}</td>
                             <td>{{ t.donViThuoc }}</td>

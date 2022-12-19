@@ -64,15 +64,7 @@
             <div>
                 <h2>DANH SÁCH ĐĂNG KÝ KHÁM BỆNH</h2>
                 <hr>
-                <div class="medical-date">
-                    <div class="medical-date-1">
-                        <h4>Ngày khám:</h4>
-                    </div>
-                    <div class="medical-date-2 form-floating mb-2 mt-2">
-                        <input type="date" class="form-control" name="date" required id="date">
-                        <label for="date">Chọn ngày khám</label>
-                    </div>
-                </div>
+
             </div>
             <div class="schedule-form">
                 <form method="post" enctype="multipart/form-data" action="/save_chi_tiet_danh_sach_kham">
@@ -112,9 +104,7 @@
         </div>
     </div>
 </div>
-{% if err_msg %}
 
-{%endif%}
 <div class="confirm-click">
     <div class="confirm-info alert alert-success">
         Xác nhận danh sách <strong>thành công &#10004</strong>

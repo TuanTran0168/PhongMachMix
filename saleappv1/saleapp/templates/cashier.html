@@ -18,8 +18,13 @@
     <div class="mt-1 mb-1">
         <button type="submit" class="btn btn-primary">Thanh toán</button>
     </div>
-</form>
 
+</form>
+{% if err_msg %}
+<div class="alert alert-danger">
+    {{ err_msg }}
+</div>
+{% endif %}
 <div class="receipt-form">
     <div class="row r-title mt-3" style="font-weight: bold">
         <p>HÓA ĐƠN</p>

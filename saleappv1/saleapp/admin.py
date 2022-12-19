@@ -55,8 +55,8 @@ class StatsView(AuthenticatedView):
     @expose('/')
     def index(self):
         statsMedicine = dao.stats_by_medic(kw=request.args.get('kw'),
-                                   from_date=request.args.get('from_date'),
-                                   to_date=request.args.get('to_date'))
+                                           from_date=request.args.get('from_date'),
+                                           to_date=request.args.get('to_date'))
         return self.render('admin/stats.html', statsMedicine=statsMedicine)
 
 

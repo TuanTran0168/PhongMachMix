@@ -5,7 +5,6 @@ from flask_login import LoginManager
 from flask_babelex import Babel
 import cloudinary
 
-
 app = Flask(__name__)
 app.secret_key = '4567890sdfghjklcvbnvb4567fg6yug'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/improok?charset=utf8mb4' % quote('Admin@123')

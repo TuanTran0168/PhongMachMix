@@ -252,7 +252,7 @@ def load_hoa_don():
     query = query.filter(HoaDon.ngayKham.__eq__(todayString))
 
     return query.group_by(HoaDon.id, PhieuKham.ngayKham, PhieuKham.id, User.tenUser, HoaDon.ngayKham,
-                          HoaDon.tongTien).all()
+                          HoaDon.tongTien).order_by(HoaDon.id).all()
 
 
 # ====================================================================================
@@ -499,17 +499,17 @@ def save_chi_tiet_phieu_kham(so_luong_thuoc=None, thuoc_id=None, phieu_kham_id=N
     db.session.commit()
 
 
-def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
-    query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung,
-                             PhieuKham.chuanDoan, PhieuKham.user_id)
-
-    if phieu_kham_id:
-        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
-        query.trieuChung = trieu_chung
-        query.chuanDoan = chuan_doan
-
-    db.session.commit()
-    return query.all()
+# def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
+#     query = db.session.query(PhieuKham.id, PhieuKham.tenPhieuKham, PhieuKham.ngayKham, PhieuKham.trieuChung,
+#                              PhieuKham.chuanDoan, PhieuKham.user_id)
+#
+#     if phieu_kham_id:
+#         query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+#         query.trieuChung = trieu_chung
+#         query.chuanDoan = chuan_doan
+#
+#     db.session.commit()
+#     return query.all()
 
 
 def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
@@ -518,6 +518,18 @@ def update_phieu_kham(phieu_kham_id=None, trieu_chung=None, chuan_doan=None):
     phieu_kham.chuanDoan = chuan_doan
 
     db.session.commit()
+
+
+def load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=None):
+    query = db.session.query(PhieuKham.id)
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(PhieuKham.ngayKham.__eq__(todayString))
+
+    if phieu_kham_id:
+        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+
+    return query.all()
 
 
 def load_thuoc_in_chi_tiet_phieu_kham_today(user_id=None):
@@ -571,7 +583,7 @@ def load_benh_id_by_ten_benh(ten_benh=None):
 def load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id=None):
     query = db.session.query(LichSuBenh.id) \
         .join(User, User.id.__eq__(LichSuBenh.user_id)) \
-        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))
 
     if phieu_kham_id:
         query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
@@ -583,14 +595,15 @@ def load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id=None):
 def load_lich_su_benh_in_view(user_id=None):
     query = db.session.query(LichSuBenh.id, LichSuBenh.user_id, User.tenUser, PhieuKham.ngayKham, PhieuKham.chuanDoan) \
         .join(User, User.id.__eq__(LichSuBenh.user_id)) \
-        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id)) \
-
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))
     if user_id:
         query = query.filter(User.id.__eq__(user_id))
 
     return query.all()
 
-        # ====================================================================================
+    # ====================================================================================
+
+
 if __name__ == '__main__':
     from saleapp import app
 
@@ -644,4 +657,6 @@ if __name__ == '__main__':
         pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
         if pk_today_for_one_user:
             user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
-            print("id nè",user_id_in_phieu_kham)
+            print("id nè", user_id_in_phieu_kham)
+
+        print(load_phieu_kham_id_today_by_phieu_kham_id(1)[0][0])
