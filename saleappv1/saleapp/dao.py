@@ -660,3 +660,5 @@ if __name__ == '__main__':
             print("id nè", user_id_in_phieu_kham)
 
         print(load_phieu_kham_id_today_by_phieu_kham_id(1)[0][0])
+
+        print(load_phieu_kham_id_today_by_phieu_kham_id(1))

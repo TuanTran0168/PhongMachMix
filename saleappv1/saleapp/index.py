@@ -159,19 +159,26 @@ def load_thuoc_trong_chi_tiet_pk():
 @app.route("/doctor_save_phieu_kham", methods=['get', 'post'])
 def doctor_save_phieu_kham():
     err_msg = ''
+
     if request.method == ('POST'):
+        phieu_kham_id = ""
+        check_pk_id_numString = ""
+        check_pk_id = ""
         phieu_kham_id = request.form["ma_phieu_kham"]
         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieu_kham_id)
+
+        # return err_msg
         if check_pk_id:
+            check_pk_id_numString = str(check_pk_id[0][0])
             trieu_chung = request.form["trieu_chung"]
             chuan_doan = request.form["chuan_doan"]
             if trieu_chung and chuan_doan:
-                dao.update_phieu_kham(phieu_kham_id=phieu_kham_id, trieu_chung=trieu_chung, chuan_doan=chuan_doan)
+                dao.update_phieu_kham(phieu_kham_id=check_pk_id_numString, trieu_chung=trieu_chung, chuan_doan=chuan_doan)
                 benh_id = dao.load_benh_id_by_ten_benh(chuan_doan)
-                lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id)
+                lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(check_pk_id_numString)
 
                 dao.save_chi_tiet_lich_su_benh(lich_su_benh_id=lsb_id[0][0], benh_id=benh_id[0][0])
-                err_msg = "Lưu thành công phiếu khám có mã phiếu là " + phieu_kham_id
+                err_msg = "Lưu thành công phiếu khám có mã phiếu là " + check_pk_id_numString
             else:
                 err_msg = "Chưa nhập chuẩn đoán và triệu chứng"
         else:
