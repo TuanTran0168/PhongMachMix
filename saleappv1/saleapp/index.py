@@ -75,7 +75,7 @@ def create_danh_sach_kham_for_nurse():  # cái action của form sẽ có tên n
 
         danh_sach_kham_hom_nay = dao.load_danh_sach_kham_by_today()
         if danh_sach_kham_hom_nay:  # có danh sách rồi
-            err_msg = "Đã tạo rồi"
+            err_msg = "Đã tạo phiếu khám cho hôm nay rồi"
         else:
             create_list = request.form['create_list']
             dao.create_danh_sach_kham(create_list)
@@ -132,6 +132,7 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
                     if thuoc:
                         dao.save_chi_tiet_phieu_kham(so_luong_thuoc=so_luong_thuoc, thuoc_id=thuoc[0][0],
                                                      phieu_kham_id=pk_today_for_one_user[0][0])
+
                         # return so_luong_thuoc
                         return redirect("/doctor")
                     else:
@@ -170,6 +171,7 @@ def doctor_save_phieu_kham():
                 lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id)
 
                 dao.save_chi_tiet_lich_su_benh(lich_su_benh_id=lsb_id[0][0], benh_id=benh_id[0][0])
+                err_msg = "Lưu thành công phiếu khám có mã phiếu là " + phieu_kham_id
             else:
                 err_msg = "Chưa nhập chuẩn đoán và triệu chứng"
         else:
