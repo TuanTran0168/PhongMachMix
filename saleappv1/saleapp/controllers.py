@@ -51,8 +51,18 @@ def logout_my_user():
 def register():
     err_msg = ''
     if request.method == 'POST':
-        password = request.form['password'] #name cua html
+        name = request.form['name']
+        username = request.form['username']
+        password = request.form['password']  # name cua html
         confirm = request.form['confirm']
+
+        birthday = request.form['birthday']
+        gender = request.form['sex']
+        telephone = request.form['telephone']
+        address = request.form['address']
+
+        # return gender
+
         if password.__eq__(confirm):
             avatar = ''
             if request.files:
@@ -60,9 +70,8 @@ def register():
                 avatar = res['secure_url']
 
             try:
-                dao.register(name=request.form['name'],
-                             password=password,
-                             username=request.form['username'], avatar=avatar)
+                dao.register(name=name, username=username, password=password, birthday=birthday, gender=int(gender),
+                             telephone=telephone, address=address, avatar=avatar)
 
                 return redirect('/login')
             except:
@@ -173,4 +182,3 @@ def add_comment(product_id):
                 }
             }
         })
-

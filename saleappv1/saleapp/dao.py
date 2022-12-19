@@ -43,15 +43,16 @@ def get_product_by_id(product_id):
 
 
 def auth_user(username, password):
-    # password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
     return User.query.filter(User.tenDangNhap.__eq__(username.strip()),
                              User.matKhau.__eq__(password)).first()
 
 
-def register(name, username, password, avatar):
+def register(name, username, password, birthday, gender, telephone, address, avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    u = User(tenUser=name, tenDangNhap=username.strip(), matKhau=password, anhDaiDien=avatar)
+    u = User(tenUser=name, tenDangNhap=username.strip(), matKhau=password, ngaySinh=birthday, gioiTinh=gender,
+             soDienThoai=telephone, diaChi=address, anhDaiDien=avatar)
     db.session.add(u)
     db.session.commit()
 
@@ -176,6 +177,8 @@ def stats_by_revenue(month=None):
     return query.group_by(HoaDon.ngayKham).all()
 
 
+# ====================================================================================
+
 # Bản gốc của tính hóa đơn
 # def bill():
 #     query = db.session.query(PhieuKham.id,func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc) ) \
@@ -223,6 +226,36 @@ def load_medical_form_today():
     query = query.filter(PhieuKham.ngayKham.contains(s))
     return query.all()
 
+
+def load_hoa_don_by_phieu_kham_id(phieu_kham_id=None):  # Viết cái câu truy vấn ngon lành mà không xài được tức ghê -_-
+    query = db.session.query(User.tenUser, HoaDon.ngayKham, HoaDon.tongTien) \
+        .join(HoaDon, HoaDon.user_id.__eq__(User.id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))
+
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(HoaDon.ngayKham.__eq__(todayString))
+
+    if phieu_kham_id:
+        query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
+
+    return query.group_by(User.tenUser, HoaDon.ngayKham, HoaDon.tongTien).all()
+
+
+def load_hoa_don():
+    query = db.session.query(HoaDon.id, PhieuKham.id, User.tenUser, HoaDon.ngayKham, HoaDon.tongTien) \
+        .join(HoaDon, HoaDon.user_id.__eq__(User.id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))
+
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(HoaDon.ngayKham.__eq__(todayString))
+
+    return query.group_by(HoaDon.id, PhieuKham.ngayKham, PhieuKham.id, User.tenUser, HoaDon.ngayKham,
+                          HoaDon.tongTien).all()
+
+
+# ====================================================================================
 
 # def load_medical_form_for_one_user_today_by_phieuKham_id(phieuKham_id):
 #     d = datetime.now
@@ -510,6 +543,7 @@ def create_lich_su_benh(user_id):
     db.session.add(lsb)
     db.session.commit()
 
+
 def load_lich_su_benh(user_id=None):
     query = db.session.query(LichSuBenh.id, LichSuBenh.tenLichSuBenh, LichSuBenh.user_id)
 
@@ -518,12 +552,14 @@ def load_lich_su_benh(user_id=None):
 
     return query.all()
 
-def save_chi_tiet_lich_su_benh(lich_su_benh_id = None, benh_id = None):
-    lsb = ChiTietLichSuBenh(lichSuBenh_id = lich_su_benh_id, benh_id = benh_id)
+
+def save_chi_tiet_lich_su_benh(lich_su_benh_id=None, benh_id=None):
+    lsb = ChiTietLichSuBenh(lichSuBenh_id=lich_su_benh_id, benh_id=benh_id)
     db.session.add(lsb)
     db.session.commit()
 
-def load_benh_id_by_ten_benh(ten_benh = None):
+
+def load_benh_id_by_ten_benh(ten_benh=None):
     query = db.session.query(Benh.id)
 
     if ten_benh:
@@ -531,17 +567,30 @@ def load_benh_id_by_ten_benh(ten_benh = None):
 
     return query.all()
 
-def load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id =None):
+
+def load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id=None):
     query = db.session.query(LichSuBenh.id) \
-            .join(User, User.id.__eq__(LichSuBenh.user_id))\
-            .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))\
+        .join(User, User.id.__eq__(LichSuBenh.user_id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id)) \
 
     if phieu_kham_id:
         query = query.filter(PhieuKham.id.__eq__(phieu_kham_id))
 
     return query.group_by(LichSuBenh.id).all()
-# ====================================================================================
 
+
+# ====================================================================================
+def load_lich_su_benh_in_view(user_id=None):
+    query = db.session.query(LichSuBenh.id, LichSuBenh.user_id, User.tenUser, PhieuKham.ngayKham, PhieuKham.chuanDoan) \
+        .join(User, User.id.__eq__(LichSuBenh.user_id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id)) \
+
+    if user_id:
+        query = query.filter(User.id.__eq__(user_id))
+
+    return query.all()
+
+        # ====================================================================================
 if __name__ == '__main__':
     from saleapp import app
 
@@ -582,3 +631,17 @@ if __name__ == '__main__':
         print(load_lich_su_benh(1))
 
         print(load_benh_id_by_ten_benh("Đau bụng")[0][0])
+
+        print(load_hoa_don_by_phieu_kham_id(5))
+
+        print("HoaDon.id, PhieuKham.id, User.tenUser, HoaDon.ngayKham, HoaDon.tongTien")
+        print(load_hoa_don())
+
+        print(load_phieu_kham())
+        print(load_lich_su_benh_in_view(1))
+
+        user_id = 1  # Lấy id user bằng nhập trên web
+        pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
+        if pk_today_for_one_user:
+            user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
+            print("id nè",user_id_in_phieu_kham)

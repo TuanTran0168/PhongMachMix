@@ -87,16 +87,11 @@
                                 <div class="mb-3 mt-3">
                                     <div class="m-diagnostic">
                                         <label class="form-label">Chuẩn đoán:</label>
-                                        <input class="form-control" list="diseases" name="chuan_doan" id="chuan_doan">
-                                        <datalist id="diseases">
+                                        <select class="form-select" name="chuan_doan" id="diseases">
                                             {% for d in diseases %}
-                                            <option value="{{ d.tenBenh }}">
+                                            <option>{{ d.tenBenh }}</option>
                                                 {% endfor %}
-                                        </datalist>
-                                        <!--                                        <label class="form-label">Chuẩn đoán:</label>-->
-                                        <!--                                        <input type="text" class="form-control" id="chuan_doan"-->
-                                        <!--                                               placeholder="Nhập chuẩn đoán"-->
-                                        <!--                                               name="chuan_doan">-->
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -107,22 +102,22 @@
                 <div class="medicine-form">
                     <table class="table">
                         <tr>
-                            <th>Id</th>
-
+                            <th>Mã <br> phiếu khám</th>
+                            <th>Mã chi tiết <br> phiếu khám</th>
                             <th>Thuốc</th>
                             <th>Đơn vị</th>
                             <th>Số lượng</th>
                             <th>Cách dùng</th>
-                            <th>Id phiếu khám</th>
                         </tr>
                         {% for t in thuoc_trong_ctpk %}
                         <tr>
+                             <td>{{ t.phieuKham_id }}</td>
                             <td>{{ t.id }}</td>
                             <td>{{ t.tenThuoc }}</td>
                             <td>{{ t.donViThuoc }}</td>
                             <td>{{ t.soLuongThuoc }}</td>
                             <td>{{ t.moTa }}</td>
-                            <td>{{ t.phieuKham_id }}</td>
+
                         </tr>
                         {% endfor %}
                     </table>

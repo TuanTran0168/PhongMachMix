@@ -49,9 +49,11 @@ def user_dang_ky_kham():
                 ngay_kham = dao.load_danh_sach_kham_by_today()
                 if ngay_kham:
                     dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
+                    err_msg = 'Đăng ký thành công'
                     lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
                     if lsb_for_one_user:
-                        err_msg = "Lịch sử bệnh đã tồn tại"
+                        pass
+                        # err_msg = "Lịch sử bệnh đã tồn tại"
                     else:
                         dao.create_lich_su_benh(user_id=benh_nhan[0][0])
                 else:
@@ -91,17 +93,20 @@ def save_chi_tiet_danh_sach_kham():  # cái action của form sẽ có tên như
             chi_tiet_dsk = dao.load_chi_tiet_DSK_today(dsk[0][0])
             n = len(chi_tiet_dsk)
             for i in range(0, n):
-                pk = dao.create_phieu_kham_auto(user_id=chi_tiet_dsk[i][2])
+                pk_today_for_one_user = dao.load_phieu_kham(user_id=chi_tiet_dsk[i][2])
+                if pk_today_for_one_user:
+                    err_msg = "đã tạo phiếu cho user này rồi"
+                else:
+                    pk = dao.create_phieu_kham_auto(user_id=chi_tiet_dsk[i][2])
+                    err_msg="Tạo thành công phiếu khám"
 
         save_chi_tiet_dsk = request.form['save_chi_tiet_dsk']  # Lấy này test coi bấm đc k
 
     return render_template("nurse.html", err_msg=err_msg)
 
 
-# bản gốc
-user_id_in_phieu_kham = ""
-
-
+# biến toàn cục mà sao không xài được :)))))
+user_id_in_phieu_kham = 0
 @app.route("/doctor_get_user_by_user_id", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như này
     err_msg = ''
@@ -125,10 +130,9 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
                 err_msg = "Bệnh nhân này không có phiếu khám"
     return render_template("doctor.html", err_msg=err_msg)
 
-
 @app.context_processor
 def load_thuoc_trong_chi_tiet_pk():
-    thuoc_trong_ctpk = dao.load_thuoc_in_chi_tiet_phieu_kham_today()
+    thuoc_trong_ctpk = dao.load_thuoc_in_chi_tiet_phieu_kham_today(user_id_in_phieu_kham)  # Không xài đc id lấy ở trên (user_id_in_phieu_kham)
     return {
         'thuoc_trong_ctpk': thuoc_trong_ctpk
     }
@@ -142,12 +146,14 @@ def doctor_save_phieu_kham():
         phieu_kham_id = request.form["ma_phieu_kham"]
         trieu_chung = request.form["trieu_chung"]
         chuan_doan = request.form["chuan_doan"]
+        if trieu_chung and chuan_doan:
+            dao.update_phieu_kham(phieu_kham_id=phieu_kham_id, trieu_chung=trieu_chung, chuan_doan=chuan_doan)
+            benh_id = dao.load_benh_id_by_ten_benh(chuan_doan)
+            lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id)
 
-        dao.update_phieu_kham(phieu_kham_id=phieu_kham_id, trieu_chung=trieu_chung, chuan_doan=chuan_doan)
-        benh_id = dao.load_benh_id_by_ten_benh(chuan_doan)
-        lsb_id = dao.load_lich_su_benh_id_by_phieu_kham_id(phieu_kham_id)
-
-        dao.save_chi_tiet_lich_su_benh(lich_su_benh_id=lsb_id[0][0], benh_id=benh_id[0][0])
+            dao.save_chi_tiet_lich_su_benh(lich_su_benh_id=lsb_id[0][0], benh_id=benh_id[0][0])
+        else:
+            err_msg = "Chưa nhập chuẩn đoán và triệu chứng"
     return render_template("doctor.html", err_msg=err_msg)
 
 
@@ -184,12 +190,17 @@ def load_phieu_kham():
 def cashier():
     # xử lý
     err_msg = ''
+    hd = ""
     # nhập id của phieuKham
     if request.method == ('POST'):
         phieuKham_id = request.form['submit_phieuKham_id']
         phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
         bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
-        dao.save_bill_for_user(phieu_kham[0][2], bill_cua_user[4], phieu_kham[0][5])
+        tien_kham = 100000
+        tien_thuoc = bill_cua_user[4] + tien_kham
+        dao.save_bill_for_user(phieu_kham[0][2], tien_thuoc, phieu_kham[0][5])
+
+        # hd = dao.load_hoa_don_by_phieu_kham_id(phieuKham_id)
         return redirect('/cashier')
 
     return render_template("cashier.html", err_msg=err_msg)
@@ -248,6 +259,23 @@ def get_user_in_danh_sach_kham():
 
     return {
         'get_user_in_danh_sach_kham': get_user_in_danh_sach_kham
+    }
+
+
+@app.context_processor
+def load_lich_su_benh_in_view():
+
+    load_lich_su_benh_in_view = dao.load_lich_su_benh_in_view() #Lấy user_id bỏ dô là lọc đc phiếu khám của 1 người
+    return {
+        "load_lich_su_benh_in_view": load_lich_su_benh_in_view
+    }
+
+
+@app.context_processor
+def load_hoa_don():
+    danh_sach_hoa_don = dao.load_hoa_don()  # Bỏ user_id dô là lọc đc lsb của user đó nhưng vì không biết truyền biến kiểu gì nên thôi load hết
+    return {
+        "danh_sach_hoa_don": danh_sach_hoa_don
     }
 
 

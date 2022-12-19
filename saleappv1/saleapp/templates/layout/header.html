@@ -15,28 +15,31 @@
 
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="/login">
-                        <img src="{{ current_user.anhDaiDien }}" width="40" class="rounded-circle" alt="{{ current_user.tenUser }}" />
+                    <a class="nav-link text-warning" href="/login">
+                        <img src="{{ current_user.anhDaiDien }}" width="40" class="rounded-circle"
+                             alt="{{ current_user.tenUser }}"/>
                         {{ current_user.tenUser }}
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="/nurse">Lập danh sách khám</a>
+                    <a class="nav-link text-light" href="/nurse">Lập danh sách khám</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="/doctor">Lập phiếu khám</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="/doctor">Lập phiếu khám</a>
+                    <a class="nav-link text-light" href="/cashier">Thanh toán hóa đơn</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-success" href="lich_su_benh">Xem lịch sử bệnh</a>
-                </li>
-                 <li class="nav-item">
-                    <a class="nav-link text-success" href="/cashier">Thanh toán hóa đơn</a>
+                    <a class="nav-link text-light" href="lich_su_benh">Xem lịch sử bệnh</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-danger" href="/logout">Đăng xuất</a>
                 </li>
                 {% else %}
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link text-success" href="/login">Đăng nhập</a>
                 </li>
                 <li class="nav-item">

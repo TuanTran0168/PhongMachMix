@@ -68,8 +68,8 @@ div.m-diagnostic > label {
     text-align: left;
 }
 
-div.m-diagnostic > input {
-    width: 255%;
+div.m-diagnostic > select {
+    width: 250%;
 }
 
 div.m-name {

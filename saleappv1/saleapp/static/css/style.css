@@ -20,8 +20,19 @@ ul.navbar-nav > li.nav-item {
     justify-content: space-around;
     align-items: center;
     font-weight: bold;
+
+}
+
+ul.navbar-nav > li.nav-item > a >img {
+   margin: 0 auto;
 }
 
 div.container-fluid > a.navbar-brand{
     font-weight: bold;
+}
+
+
+div.carousel-inner{
+    width: 90% !important;
+    margin: 0 auto;
 }

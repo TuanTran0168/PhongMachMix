@@ -20,42 +20,73 @@
     </div>
 </form>
 
-<div class="r-content">
-    <div class="r-sub-content mb-0">
-        <div class="row r-title" style="font-weight: bold">
-            <p>HÓA ĐƠN</p>
-        </div>
-        <hr>
+<div class="receipt-form">
+    <div class="row r-title mt-3" style="font-weight: bold">
+        <p>HÓA ĐƠN</p>
+    </div>
+    <hr>
 
-        <div class="r-sub-content-1">
-            <div class="row">
-                <div class="col-md-6 mt-2 mb-2">
-                    Họ tên:
-                </div>
-                <div class="col-md-6 mt-2 mb-2">
-                    Ngày khám:
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mt-2 mb-2">
-                    Tiền khám:
-                </div>
-                <div class="col-md-6 mt-2 mb-2">
-                    Tiền thuốc:
-                </div>
-            </div>
-
-            <hr>
-            <div class="row">
-                <div class="col-md-12 mt-2 mb-2" style="font-weight: bold">
-                    Tổng tiền:
-                </div>
-            </div>
-        </div>
-
+    <div class="receipt-table">
+        <table class="table">
+            <tr>
+                <th>Mã hóa đơn</th>
+                <th>Mã phiếu khám</th>
+                <th>Họ tên</th>
+                <th>Ngày khám</th>
+                <th>Tiền khám</th>
+                <th>Tiền thuốc</th>
+                <th>Tổng tiền</th>
+            </tr>
+            {% for hd in danh_sach_hoa_don %}
+            <tr>
+                <td>{{ hd.0 }}</td>
+                <td>{{ hd.1 }}</td>
+                <td>{{ hd.2 }}</td>
+                <td>{{ hd.3 }}</td>
+                <td>100.000 VND</td>
+                <td>{{ "{:,.0f}".format (hd.4 - 100000) }} VND</td>
+                <td>{{ "{:,.0f}".format (hd.4) }} VND</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </div>
 
+<!--<div class="r-content">-->
+<!--    <div class="r-sub-content mb-0">-->
+<!--        <div class="row r-title" style="font-weight: bold">-->
+<!--            <p>HÓA ĐƠN</p>-->
+<!--        </div>-->
+<!--        <hr>-->
+
+<!--        <div class="r-sub-content-1">-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-6 mt-2 mb-2">-->
+<!--                    Họ tên:-->
+<!--                </div>-->
+<!--                <div class="col-md-6 mt-2 mb-2">-->
+<!--                    Ngày khám:-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="row">-->
+<!--                <div class="col-md-6 mt-2 mb-2">-->
+<!--                    Tiền khám:-->
+<!--                </div>-->
+<!--                <div class="col-md-6 mt-2 mb-2">-->
+<!--                    Tiền thuốc:-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <hr>-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-12 mt-2 mb-2" style="font-weight: bold">-->
+<!--                    Tổng tiền:-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
 
 {% endblock %}

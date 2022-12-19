@@ -4,27 +4,24 @@ div.user-left {
 
 div.user {
     margin: 1%;
-}
-
-div.user-center {
-    border-right: solid;
+    text-align: center;
+    border: solid;
 }
 
 div.content {
     padding-top: 5%;
 }
 
-div.user-center-img {
+div.user-left-img {
     width: 285px;
     height: 370px;
 }
 
-div.content > div.user-center-img > img {
+div.content > div.user-left-img > img {
     width: 95%;
     height: 95%;
 }
 
-div.register_medical {
-    background-color: #e6e6e6;
-    margin-top: 2%;
+div.content > h1 {
+    text-align: center;
 }

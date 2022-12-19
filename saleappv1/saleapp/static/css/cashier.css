@@ -4,9 +4,10 @@ h1.cashier {
     margin: 1%;
 }
 
-div.r-content {
+div.receipt-form {
     margin-top: 1%;
     border: solid;
+    text-align: center;
 }
 
 div.r-sub-content {
@@ -46,3 +47,7 @@ div.thanh_toan_1 {
     margin-right: 3%;
 }
 
+div.receipt-table {
+    height: 400px;
+    overflow: auto;
+}

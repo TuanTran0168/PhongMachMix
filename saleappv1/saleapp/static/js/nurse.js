@@ -4,3 +4,7 @@ $(document).ready(function() {
         $("div.confirm-click > div.confirm-info").fadeOut(3000)
     })
 })
+
+window.onload = function() {
+    drawRevenueStats(labels, data)
+  }

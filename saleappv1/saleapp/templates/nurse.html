@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body text-center">
                         <h5>{{ current_user.tenUser }}</h5>
-                        <h5>{{ current_user.user_role }}</h5>
+                        <h5>{{ current_user.user_role.name }}</h5>
                         <h5 style="color: blue">ONLINE <i class="fas fa-toggle-on"></i></h5>
                     </div>
                 </div>
@@ -29,6 +29,11 @@
                         <input type="submit" value="Tạo danh sách" class="btn btn-info" required id="create_list"
                                name="create_list"/>
                     </div>
+                    {% if err_msg %}
+                    <div class="alert alert-danger">
+                        {{ err_msg }}
+                    </div>
+                    {%endif%}
                     <div class="table-danh-sach-kham ">
                         <table class="table">
                             <tr>
@@ -71,7 +76,7 @@
             </div>
             <div class="schedule-form">
                 <form method="post" enctype="multipart/form-data" action="/save_chi_tiet_danh_sach_kham">
-                    <div class = "chi-tiet-danh-sach-kham">
+                    <div class="chi-tiet-danh-sach-kham">
                         <table class="table">
                             <tr>
                                 <th>Mã bệnh nhân</th>
@@ -91,7 +96,7 @@
                                 <td>Nữ</td>
                                 {% endif %}
                                 <td>{{ us[0][3] }}</td>
-                                 <td>{{ us[0][5] }}</td>
+                                <td>{{ us[0][5] }}</td>
                                 <td>{{ us[0][4] }}</td>
                             </tr>
                             {% endfor %}
@@ -107,6 +112,9 @@
         </div>
     </div>
 </div>
+{% if err_msg %}
+
+{%endif%}
 <div class="confirm-click">
     <div class="confirm-info alert alert-success">
         Xác nhận danh sách <strong>thành công &#10004</strong>
