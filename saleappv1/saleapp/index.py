@@ -118,22 +118,30 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
     err_msg = ''
     if request.method == ('POST'):
         user_id = request.form["doctor_get_user_by_user_id"]  # Lấy id user bằng nhập trên web
-        pk_today_for_one_user = dao.load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
-        if pk_today_for_one_user:
-            user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
-            user_in_phieu_kham = dao.load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
-            # LƯU THUỐC CHO BỆNH NHÂN
-            if user_in_phieu_kham:
-                ten_thuoc = request.form["medicine"]
-                so_luong_thuoc = request.form["so_luong_thuoc"]
-                thuoc = dao.load_medicines_by_name(ten_thuoc)
-                if thuoc:
-                    dao.save_chi_tiet_phieu_kham(so_luong_thuoc=so_luong_thuoc, thuoc_id=thuoc[0][0],
-                                                 phieu_kham_id=pk_today_for_one_user[0][0])
-                    # return so_luong_thuoc
-                    return redirect("/doctor")
+        phieu_kham_da_duoc_tao = dao.load_phieu_kham(user_id)
+        if phieu_kham_da_duoc_tao:
+            pk_today_for_one_user = dao.load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
+            if pk_today_for_one_user:
+                user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
+                user_in_phieu_kham = dao.load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
+                # LƯU THUỐC CHO BỆNH NHÂN
+                if user_in_phieu_kham:
+                    ten_thuoc = request.form["medicine"]
+                    so_luong_thuoc = request.form["so_luong_thuoc"]
+                    thuoc = dao.load_medicines_by_name(ten_thuoc)
+                    if thuoc:
+                        dao.save_chi_tiet_phieu_kham(so_luong_thuoc=so_luong_thuoc, thuoc_id=thuoc[0][0],
+                                                     phieu_kham_id=pk_today_for_one_user[0][0])
+                        # return so_luong_thuoc
+                        return redirect("/doctor")
+                    else:
+                        err_msg = "Không có thuốc này trong cơ sở dữ liệu"
+                else:
+                    err_msg = "Bệnh nhân này không có phiếu khám"
             else:
-                err_msg = "Bệnh nhân này không có phiếu khám"
+                err_msg = "Không tìm được mã bệnh nhân trong danh sách các phiếu khám"
+        else:
+            err_msg = "Phiếu khám chưa được tạo"
     return render_template("doctor.html", err_msg=err_msg)
 
 
