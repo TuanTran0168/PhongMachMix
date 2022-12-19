@@ -75,7 +75,7 @@ def create_danh_sach_kham_for_nurse():  # cái action của form sẽ có tên n
 
         danh_sach_kham_hom_nay = dao.load_danh_sach_kham_by_today()
         if danh_sach_kham_hom_nay:  # có danh sách rồi
-            err_msg = "Đã tạo phiếu khám cho hôm nay rồi"
+            err_msg = "Đã tạo danh sách khám cho hôm nay rồi"
         else:
             create_list = request.form['create_list']
             dao.create_danh_sach_kham(create_list)
