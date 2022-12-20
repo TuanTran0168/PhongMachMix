@@ -1,5 +1,6 @@
 from flask import session, render_template, request, redirect
 from saleapp import app, dao, admin, login, utils, controllers
+from flask_login import current_user
 
 app.add_url_rule('/', 'index', controllers.index)
 app.add_url_rule('/products/<int:product_id>', 'product-detail', controllers.details)
@@ -24,11 +25,6 @@ def doctor():
 @app.route("/nurse")
 def nurse():
     return render_template("nurse.html")
-
-
-@app.route("/lich_su_benh")
-def lich_su_benh():
-    return render_template("lich_su_benh.html")
 
 
 @app.route("/user_dang_ky_kham", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
@@ -111,8 +107,7 @@ def save_chi_tiet_danh_sach_kham():  # cái action của form sẽ có tên như
 
 # biến toàn cục mà sao không xài được :)))))
 user_id_in_phieu_kham = 0
-
-
+ma_phieu_kham_today = 0
 @app.route("/doctor_get_user_by_user_id", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như này
     err_msg = ''
@@ -120,8 +115,12 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
         user_id = request.form["doctor_get_user_by_user_id"]  # Lấy id user bằng nhập trên web
         phieu_kham_da_duoc_tao = dao.load_phieu_kham(user_id)
         if phieu_kham_da_duoc_tao:
+
             pk_today_for_one_user = dao.load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
+            global ma_phieu_kham_today
+            ma_phieu_kham_today = pk_today_for_one_user[0][0]
             if pk_today_for_one_user:
+                global user_id_in_phieu_kham
                 user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
                 user_in_phieu_kham = dao.load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
                 # LƯU THUỐC CHO BỆNH NHÂN
@@ -145,7 +144,12 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
             err_msg = "Phiếu khám chưa được tạo"
     return render_template("doctor.html", err_msg=err_msg)
 
-
+@app.context_processor
+def load_users_by_user_id_view():
+    user_id_view = dao.load_users_by_user_id(user_id_in_phieu_kham)
+    return {
+        "user_id_view": user_id_view
+    }
 @app.context_processor
 def load_thuoc_trong_chi_tiet_pk():
     thuoc_trong_ctpk = dao.load_thuoc_in_chi_tiet_phieu_kham_today(
@@ -164,7 +168,8 @@ def doctor_save_phieu_kham():
         phieu_kham_id = ""
         check_pk_id_numString = ""
         check_pk_id = ""
-        phieu_kham_id = request.form["ma_phieu_kham"]
+        # phieu_kham_id = request.form["ma_phieu_kham"]
+        phieu_kham_id = ma_phieu_kham_today
         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieu_kham_id)
 
         # return err_msg
@@ -214,7 +219,7 @@ def load_phieu_kham():
         'phieu_kham': phieu_kham
     }
 
-
+user_id_in_hoa_don_for_one_user = 0
 @app.route("/cashier", methods=['get', 'post'])
 def cashier():
     # xử lý
@@ -225,6 +230,8 @@ def cashier():
         phieuKham_id = request.form['submit_phieuKham_id']
         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieuKham_id)
         if check_pk_id:
+            global user_id_in_hoa_don_for_one_user
+            user_id_in_hoa_don_for_one_user = phieuKham_id
             phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
             bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
             tien_kham = 100000
@@ -295,21 +302,63 @@ def get_user_in_danh_sach_kham():
     }
 
 
-@app.context_processor
-def load_lich_su_benh_in_view():
-    load_lich_su_benh_in_view = dao.load_lich_su_benh_in_view()  # Lấy user_id bỏ dô là lọc đc phiếu khám của 1 người
-    return {
-        "load_lich_su_benh_in_view": load_lich_su_benh_in_view
-    }
+
 
 
 @app.context_processor
 def load_hoa_don():
-    danh_sach_hoa_don = dao.load_hoa_don()  # Bỏ user_id dô là lọc đc lsb của user đó nhưng vì không biết truyền biến kiểu gì nên thôi load hết
+    danh_sach_hoa_don = dao.load_hoa_don()
     return {
         "danh_sach_hoa_don": danh_sach_hoa_don
     }
 
+@app.context_processor
+def load_hoa_don_for_one_user():
+    hoa_don = dao.load_hoa_don_by_phieu_kham_id(user_id_in_hoa_don_for_one_user)  # Bỏ user_id dô là lọc đc lsb của user đó nhưng vì không biết truyền biến kiểu gì nên thôi load hết
+    return {
+        "hoa_don": hoa_don
+    }
+
+user_id_in_lich_su_benh_after_filter = 0
+@app.route("/lay_ma_benh_nhan_xem_lich_su_benh", methods=['get', 'post'])
+def lay_ma_benh_nhan_xem_lich_su_benh():
+    # xử lý
+    err_msg = ''
+    # nhập id của phieuKham
+    if request.method == ('POST'):
+        id_benh_nhan = request.form["id_benh_nhan"]
+        #dùng id lấy lịch sử bệnh lên, nếu có thì mới làm
+        lich_su_benh_for_one_user = dao.load_lich_su_benh_in_view(id_benh_nhan)
+        # return str(lich_su_benh_for_one_user[0][1])
+        if lich_su_benh_for_one_user:
+            global user_id_in_lich_su_benh_after_filter
+            user_id_in_lich_su_benh_after_filter = lich_su_benh_for_one_user[0][1]
+        else:
+            err_msg = "Không tồn tại bệnh nhân này"
+
+    return render_template("lich_su_benh.html", err_msg=err_msg)
+
+@app.route("/lich_su_benh")
+def lich_su_benh():
+    if current_user.is_authenticated:
+        lsb_for_crr = dao.load_lich_su_benh_in_view(current_user.id)
+    return render_template("lich_su_benh.html", lsb_for_crr=lsb_for_crr)
+
+# @app.route("/lich_su_benh")
+# def load_lich_su_benh():
+#     load_lich_su_benh_in_view = dao.load_lich_su_benh_in_view(user_id_in_lich_su_benh_after_filter)
+#     if load_lich_su_benh_in_view:
+#         return load_lich_su_benh_in_view
+#
+#     return render_template("lich_su_benh.html", load_lich_su_benh_in_view=load_lich_su_benh_in_view)
+
+@app.context_processor
+def load_lich_su_benh():
+    load_lich_su_benh_in_view = dao.load_lich_su_benh_in_view(user_id_in_lich_su_benh_after_filter)
+
+    return {
+        "load_lich_su_benh_in_view": load_lich_su_benh_in_view
+    }
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -243,3 +243,4 @@ if __name__ == '__main__':
         # db.session.add_all([hd1, hd2, hd3, hd4, hd5, hd6, hd7, hd8])
 
         db.session.commit()
+

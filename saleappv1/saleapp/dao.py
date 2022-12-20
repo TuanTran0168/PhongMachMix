@@ -601,7 +601,16 @@ def load_lich_su_benh_in_view(user_id=None):
 
     return query.all()
 
-    # ====================================================================================
+def load_lich_su_benh_in_view_doctor(user_id=None):
+    query = db.session.query(LichSuBenh.id, LichSuBenh.user_id, User.tenUser, PhieuKham.ngayKham, PhieuKham.chuanDoan) \
+        .join(User, User.id.__eq__(LichSuBenh.user_id)) \
+        .join(PhieuKham, PhieuKham.user_id.__eq__(User.id))
+    if user_id:
+        query = query.filter(User.id.__eq__(user_id))
+
+    return query.all()
+
+# ====================================================================================
 
 
 if __name__ == '__main__':
@@ -628,6 +637,8 @@ if __name__ == '__main__':
         # print(user_in_phieu_kham[0][1])
         # print("\nPhiếu khám\n")
         # print(load_phieu_kham(1))
+
+        # print(load_role_by_current_user_id())
 
         user_id = 1  # Lấy id user bằng nhập trên web
         pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
@@ -662,3 +673,10 @@ if __name__ == '__main__':
         print(load_phieu_kham_id_today_by_phieu_kham_id(1)[0][0])
 
         print(load_phieu_kham_id_today_by_phieu_kham_id(1))
+        print(load_users_by_user_id(1))
+
+        print(load_thuoc_in_chi_tiet_phieu_kham_today(1)[0][0])
+        print(load_hoa_don_by_phieu_kham_id(1)[0])
+
+        print(load_lich_su_benh_in_view(10))
+

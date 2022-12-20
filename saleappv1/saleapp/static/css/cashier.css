@@ -13,6 +13,7 @@ div.receipt-form {
 div.r-sub-content {
     margin: 1%;
     height: 325px;
+    border: solid;
 }
 
 div.r-title > p {

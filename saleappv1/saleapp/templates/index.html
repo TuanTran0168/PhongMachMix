@@ -19,9 +19,11 @@
                          alt="{{ current_user.tenUser }}">
                 </div>
                 <div class="card-body text-center">
+                    <h4 class="card-title">Mã bệnh nhân: {{ current_user.id }}</h4>
                     <h4 class="card-title">{{ current_user.tenUser }}</h4>
-                    <h4 class="card-title">{{ current_user.user_role.name }}</h4>
-                    <h4 class="card-title">{{ current_user.ngaySinh }}</h4>
+                     <h4 class="card-title">SĐT: {{ current_user.soDienThoai }}</h4>
+                    <h4 class="card-title">Vai trò: {{ current_user.user_role.name }}</h4>
+                    <h4 class="card-title">Ngày sinh: {{ current_user.ngaySinh }}</h4>
                     <h4 style="color: blue">ONLINE <i class="fas fa-toggle-on"></i></h4>
                 </div>
             </div>

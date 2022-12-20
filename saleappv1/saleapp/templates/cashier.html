@@ -25,9 +25,48 @@
     {{ err_msg }}
 </div>
 {% endif %}
+
+<div class="r-content">
+    <div class="r-sub-content mb-0">
+
+        <div class="row r-title" style="font-weight: bold">
+            <p>HÓA ĐƠN</p>
+        </div>
+        <hr>
+        {% if hoa_don %}
+        <div class="r-sub-content-1">
+            <div class="row">
+                <div class="col-md-6 mt-2 mb-2">
+                    Họ tên: {{ hoa_don[0][0] }}
+                </div>
+                <div class="col-md-6 mt-2 mb-2">
+                    Ngày khám: {{ hoa_don[0][1] }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mt-2 mb-2">
+                    Tiền khám: 100.000 VNĐ
+                </div>
+                <div class="col-md-6 mt-2 mb-2">
+                    Tiền thuốc: {{ "{:,.0f}".format(hoa_don[0][2] - 100000) }} VNĐ
+                </div>
+            </div>
+
+            <hr>
+            <div class="row text-center">
+                <div class="col-md-12 mt-2 mb-2" style="font-weight: bold">
+                    Tổng tiền: {{ "{:,.0f}".format(hoa_don[0][2]) }} VNĐ
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
 <div class="receipt-form">
     <div class="row r-title mt-3" style="font-weight: bold">
-        <p>HÓA ĐƠN</p>
+        <p>DANH SÁCH HÓA ĐƠN</p>
     </div>
     <hr>
 
@@ -56,42 +95,5 @@
         </table>
     </div>
 </div>
-
-<!--<div class="r-content">-->
-<!--    <div class="r-sub-content mb-0">-->
-<!--        <div class="row r-title" style="font-weight: bold">-->
-<!--            <p>HÓA ĐƠN</p>-->
-<!--        </div>-->
-<!--        <hr>-->
-
-<!--        <div class="r-sub-content-1">-->
-<!--            <div class="row">-->
-<!--                <div class="col-md-6 mt-2 mb-2">-->
-<!--                    Họ tên:-->
-<!--                </div>-->
-<!--                <div class="col-md-6 mt-2 mb-2">-->
-<!--                    Ngày khám:-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div class="row">-->
-<!--                <div class="col-md-6 mt-2 mb-2">-->
-<!--                    Tiền khám:-->
-<!--                </div>-->
-<!--                <div class="col-md-6 mt-2 mb-2">-->
-<!--                    Tiền thuốc:-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <hr>-->
-<!--            <div class="row">-->
-<!--                <div class="col-md-12 mt-2 mb-2" style="font-weight: bold">-->
-<!--                    Tổng tiền:-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </div>-->
-<!--</div>-->
 
 {% endblock %}
