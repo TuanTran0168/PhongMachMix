@@ -611,8 +611,16 @@ def load_lich_su_benh_in_view_doctor(user_id=None):
     return query.all()
 
 # ====================================================================================
+def count_user_in_danh_sach_kham_today():
+    query = db.session.query(DanhSachKham.id, func.count(ChiTietDanhSachKham.id))\
+        .join(ChiTietDanhSachKham, ChiTietDanhSachKham.danhSachKham_id.__eq__(DanhSachKham.id))
 
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(DanhSachKham.ngayKham.__eq__(todayString))
 
+    return query.group_by(DanhSachKham.id).all()
+# ====================================================================================
 if __name__ == '__main__':
     from saleapp import app
 
@@ -679,4 +687,6 @@ if __name__ == '__main__':
         print(load_hoa_don_by_phieu_kham_id(1)[0])
 
         print(load_lich_su_benh_in_view(10))
+
+        print(count_user_in_danh_sach_kham_today())
 

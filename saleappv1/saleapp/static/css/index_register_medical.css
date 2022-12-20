@@ -27,4 +27,5 @@ div.content > div.user-center-img > img {
 div.register_medical {
     background-color: #e6e6e6;
     margin-top: 2%;
+    border: solid;
 }

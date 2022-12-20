@@ -1,0 +1,21 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<form method="post" enctype="multipart/form-data" action="/quy_dinh">
+    <div class = "quy_dinh_tien_kham">
+        <div class="mb-3 mt-3">
+            <label for="tien_kham" class="form-label">Tiền khám:</label>
+            <input type="text" class="form-control" id="tien_kham" placeholder="Nhập số tiền khám" name="tien_kham">
+        </div>
+    </div>
+
+    <div class = "quy_dinh_so_benh_nhan">
+        <div class="mb-3 mt-3">
+            <label for="so_benh_nhan" class="form-label">Số lương bệnh nhân:</label>
+            <input type="text" class="form-control" id="so_benh_nhan" placeholder="Nhập số lượng bệnh nhân" name="so_benh_nhan">
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
