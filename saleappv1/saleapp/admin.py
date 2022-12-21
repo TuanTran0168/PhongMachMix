@@ -83,6 +83,7 @@ class MyAdminView(AdminIndexView):
         userRoleStats = dao.count_user()
         return self.render('admin/index.html', userRoleStats=userRoleStats, statsProduct=statsProduct)
 
+
 class RuleView(BaseView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
@@ -131,27 +132,29 @@ class MyRuleView(RuleView):
             if request.method.__eq__("POST"):
                 tien_kham = request.form["tien_kham"]
                 so_benh_nhan = request.form["so_benh_nhan"]
-                file.write(json.dumps(quy_dinh))
-                if int(tien_kham) < 0 or int(so_benh_nhan) < 0:
-                    err_msg = "Số tiền khám hoặc số bệnh nhân phải lớn hơn 0"
-                    file.write(json.dumps(quy_dinh))
-                    return render_template('admin/rule.html', quy_dinh=quy_dinh, err_msg=err_msg)
+                # file.write(json.dumps(quy_dinh))
+                if tien_kham and so_benh_nhan:
+                    if int(tien_kham) < 0 or int(so_benh_nhan) < 0:
+                        err_msg = "Số tiền khám hoặc số bệnh nhân phải lớn hơn 0"
+                        file.write(json.dumps(quy_dinh))
+                        return self.render('admin/rule.html', quy_dinh=quy_dinh, err_msg=err_msg)
+                    else:
+                        quy_dinh["tien_kham"] = tien_kham
+                        quy_dinh["so_benh_nhan"] = so_benh_nhan
+                        file.write(json.dumps(quy_dinh))
+                        return self.render("admin/rule.html", quy_dinh=quy_dinh, err_msg=err_msg)
                 else:
-                    quy_dinh["tien_kham"] = tien_kham
-                    quy_dinh["so_benh_nhan"] = so_benh_nhan
+                    err_msg = "Chưa nhập đủ"
                     file.write(json.dumps(quy_dinh))
-                    return self.render("admin/rule.html")
                 #     ====================================================================
         return self.render('admin/rule.html', quy_dinh=quy_dinh, err_msg=err_msg)
-
-
 
 
 admin = Admin(app=app, name='QUẢN TRỊ', template_mode='bootstrap4', index_view=MyAdminView())
 admin.add_view(AuthenticatedModelView(DanhMucThuoc, db.session, name='Danh mục thuốc'))
 admin.add_view(AuthenticatedModelView(Thuoc, db.session, name='Danh sách thuốc'))
 admin.add_view(AuthenticatedModelView(User, db.session, name='Tài khoản'))
-admin.add_view(MyRuleView(name = "Quy định"))
+admin.add_view(MyRuleView(name="Quy định"))
 admin.add_view(StatsView(name='Thống kê - Báo cáo sử dụng thuốc'))
 admin.add_view(StatsView1(name='Thống kê - báo cáo doanh thu'))
 admin.add_view(LogoutView(name='Đăng xuất'))

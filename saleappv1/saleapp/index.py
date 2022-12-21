@@ -28,17 +28,56 @@ def nurse():
     return render_template("nurse.html")
 
 
+# @app.route("/user_dang_ky_kham", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
+# def user_dang_ky_kham():
+#     err_msg = ''
+#     if request.method == ('POST'):
+#         with open("data/quy_dinh.json", "r") as file:
+#             quy_dinh = json.load(file)
+#         so_luong_benh_nhan_trong_danh_sach = dao.count_user_in_danh_sach_kham_today()
+#         if so_luong_benh_nhan_trong_danh_sach:
+#             so_luong_benh_nhan_trong_danh_sach = so_luong_benh_nhan_trong_danh_sach[0][1]
+#
+#             so_benh_nhan_theo_quy_dinh = quy_dinh["so_benh_nhan"]
+#             if so_luong_benh_nhan_trong_danh_sach < so_benh_nhan_theo_quy_dinh:
+#                 SDT_dang_ky_kham = request.form['user_dang_ky_kham']
+#
+#                 benh_nhan = dao.load_users_by_phone_number(SDT_dang_ky_kham)
+#                 if benh_nhan:
+#                     benh_nhan_da_dang_ky = dao.load_chi_tiet_danh_sach_kham_today(benh_nhan[0][0])
+#
+#                     # Nếu bệnh nhân có lịch sử bệnh rồi thì khôg tạo nữa
+#                     # load lịch sử bệnh lên kiểm tra bằng id user
+#                     if benh_nhan_da_dang_ky:
+#                         err_msg = "Bạn đã đăng ký rồi"
+#                     else:
+#                         ngay_kham = dao.load_danh_sach_kham_by_today()
+#                         if ngay_kham:
+#                             dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
+#                             err_msg = 'Đăng ký thành công'
+#                             lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
+#                             if lsb_for_one_user:
+#                                 pass
+#                                 # err_msg = "Lịch sử bệnh đã tồn tại"
+#                             else:
+#                                 dao.create_lich_su_benh(user_id=benh_nhan[0][0])
+#                         else:
+#                             err_msg = "Chưa có danh sách để đăng ký"
+#                 else:
+#                     err_msg = "Không tồn tại user trong cơ sở dữ liệu"
+#             else:
+#                 err_msg = "Số lượng bệnh nhân trong danh sách đã đầy, vui lòng đăng ký khám vào hôm sau"
+#         else:
+#             err_msg = "Chưa có danh sách để đăng ký"
+#     return render_template("index.html", err_msg=err_msg)
+
 @app.route("/user_dang_ky_kham", methods=['get', 'post'])  # đường dẫn chứa cái trang cần lấy data
 def user_dang_ky_kham():
     err_msg = ''
     if request.method == ('POST'):
         with open("data/quy_dinh.json", "r") as file:
             quy_dinh = json.load(file)
-        so_luong_benh_nhan_trong_danh_sach = dao.count_user_in_danh_sach_kham_today()
-        so_luong_benh_nhan_trong_danh_sach = so_luong_benh_nhan_trong_danh_sach[0][1]
 
-        so_benh_nhan_theo_quy_dinh = quy_dinh["so_benh_nhan"]
-        if so_luong_benh_nhan_trong_danh_sach < so_benh_nhan_theo_quy_dinh:
             SDT_dang_ky_kham = request.form['user_dang_ky_kham']
 
             benh_nhan = dao.load_users_by_phone_number(SDT_dang_ky_kham)
@@ -50,22 +89,45 @@ def user_dang_ky_kham():
                 if benh_nhan_da_dang_ky:
                     err_msg = "Bạn đã đăng ký rồi"
                 else:
-                    ngay_kham = dao.load_danh_sach_kham_by_today()
-                    if ngay_kham:
-                        dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
-                        err_msg = 'Đăng ký thành công'
-                        lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
-                        if lsb_for_one_user:
-                            pass
-                            # err_msg = "Lịch sử bệnh đã tồn tại"
+                    so_luong_benh_nhan_trong_danh_sach = dao.count_user_in_danh_sach_kham_today()
+                    if so_luong_benh_nhan_trong_danh_sach:
+                        so_luong_benh_nhan_trong_danh_sach = so_luong_benh_nhan_trong_danh_sach[0][1]
+                        so_benh_nhan_theo_quy_dinh = quy_dinh["so_benh_nhan"]
+                        if int(so_luong_benh_nhan_trong_danh_sach) < int(so_benh_nhan_theo_quy_dinh):
+                            ngay_kham = dao.load_danh_sach_kham_by_today()
+                            if ngay_kham:
+                                dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
+                                err_msg = 'Đăng ký thành công'
+                                lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
+                                if lsb_for_one_user:
+                                    pass
+                                    # err_msg = "Lịch sử bệnh đã tồn tại"
+                                else:
+                                    dao.create_lich_su_benh(user_id=benh_nhan[0][0])
+                            else:
+                                err_msg = "Chưa có danh sách để đăng ký"
                         else:
-                            dao.create_lich_su_benh(user_id=benh_nhan[0][0])
+                            err_msg = "Số lượng bệnh nhân trong danh sách đã đầy, vui lòng đăng ký khám vào hôm sau"
                     else:
-                        err_msg = "Chưa có danh sách để đăng ký"
+                        so_luong_benh_nhan_trong_danh_sach = 0
+                        if so_luong_benh_nhan_trong_danh_sach == 0:
+                            so_benh_nhan_theo_quy_dinh = quy_dinh["so_benh_nhan"]
+                            if so_luong_benh_nhan_trong_danh_sach < int(so_benh_nhan_theo_quy_dinh):
+                                ngay_kham = dao.load_danh_sach_kham_by_today()
+                                if ngay_kham:
+                                    dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
+                                    err_msg = 'Đăng ký thành công'
+                                    lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
+                                else:
+                                    err_msg = "Có lỗi xảy ra"
+                            else:
+                                err_msg = "Có lỗi xảy ra"
+                        else:
+                            err_msg = "Có lỗi xảy ra"
+
             else:
                 err_msg = "Không tồn tại user trong cơ sở dữ liệu"
-        else:
-            err_msg = "Số lượng bệnh nhân trong danh sách đã đầy, vui lòng đăng ký khám vào hôm sau"
+
     return render_template("index.html", err_msg=err_msg)
 
 
@@ -125,7 +187,6 @@ def doctor_get_user_by_user_id():  # cái action của form sẽ có tên như n
         user_id = request.form["doctor_get_user_by_user_id"]  # Lấy id user bằng nhập trên web
         phieu_kham_da_duoc_tao = dao.load_phieu_kham(user_id)
         if phieu_kham_da_duoc_tao:
-
             pk_today_for_one_user = dao.load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
             global ma_phieu_kham_today
             ma_phieu_kham_today = pk_today_for_one_user[0][0]
@@ -237,6 +298,62 @@ def load_phieu_kham():
 user_id_in_hoa_don_for_one_user = 0
 
 
+# @app.route("/cashier", methods=['get', 'post'])
+# def cashier():
+#     # xử lý
+#     err_msg = ''
+#     hd = ""
+#     tien_kham = 0
+#     tien_thuoc = 0
+#     # nhập id của phieuKham
+#     if request.method == ('POST'):
+#         with open("data/quy_dinh.json", "r") as file:
+#             quy_dinh = json.load(file)
+#         phieuKham_id = request.form['submit_phieuKham_id']
+#         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieuKham_id)
+#         if check_pk_id:
+#             global user_id_in_hoa_don_for_one_user
+#             user_id_in_hoa_don_for_one_user = phieuKham_id
+#             phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
+#             bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
+#             tien_kham = float(quy_dinh["tien_kham"])
+#
+#             tien_thuoc = bill_cua_user[4] + tien_kham
+#             dao.save_bill_for_user(phieu_kham[0][2], tien_thuoc, phieu_kham[0][5])
+#             err_msg = "Thanh toán thành công"
+#         else:
+#             err_msg = "Không tồn tại phiếu khám này"
+#             return render_template("cashier.html", err_msg=err_msg, quy_dinh=quy_dinh)
+#         # hd = dao.load_hoa_don_by_phieu_kham_id(phieuKham_id)
+#         # return redirect('/cashier')
+#
+#     return render_template("cashier.html", err_msg=err_msg, quy_dinh=quy_dinh)
+
+# @app.route("/cashier", methods=['get', 'post'])
+# def cashier():
+#     # xử lý
+#     err_msg = ''
+#     hd = ""
+#     # nhập id của phieuKham
+#     if request.method == ('POST'):
+#         phieuKham_id = request.form['submit_phieuKham_id']
+#         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieuKham_id)
+#         if check_pk_id:
+#             global user_id_in_hoa_don_for_one_user
+#             user_id_in_hoa_don_for_one_user = phieuKham_id
+#             phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
+#             bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
+#             tien_kham = 100000
+#             tien_thuoc = bill_cua_user[4] + tien_kham
+#             dao.save_bill_for_user(phieu_kham[0][2], tien_thuoc, phieu_kham[0][5])
+#             err_msg = "Thanh toán thành công"
+#         else:
+#             err_msg = "Không tồn tại phiếu khám này"
+#         # hd = dao.load_hoa_don_by_phieu_kham_id(phieuKham_id)
+#         # return redirect('/cashier')
+#
+#     return render_template("cashier.html", err_msg=err_msg)
+
 @app.route("/cashier", methods=['get', 'post'])
 def cashier():
     # xử lý
@@ -244,6 +361,9 @@ def cashier():
     hd = ""
     # nhập id của phieuKham
     if request.method == ('POST'):
+        with open("data/quy_dinh.json", "r") as file:
+            quy_dinh = json.load(file)
+        tien_kham = quy_dinh["tien_kham"]
         phieuKham_id = request.form['submit_phieuKham_id']
         check_pk_id = dao.load_phieu_kham_id_today_by_phieu_kham_id(phieu_kham_id=phieuKham_id)
         if check_pk_id:
@@ -251,12 +371,19 @@ def cashier():
             user_id_in_hoa_don_for_one_user = phieuKham_id
             phieu_kham = dao.load_medical_form_for_one_user_by_phieuKham_id(phieuKham_id)
             bill_cua_user = dao.bill_for_one_user_by_id(phieu_kham[0][5])
-            tien_kham = 100000
-            tien_thuoc = bill_cua_user[4] + tien_kham
-            dao.save_bill_for_user(phieu_kham[0][2], tien_thuoc, phieu_kham[0][5])
-            err_msg = "Thanh toán thành công"
+            # tien_kham = 100000
+            tien_kham = float(tien_kham)
+            if tien_kham >= 0:
+                tien_thuoc = bill_cua_user[4] + tien_kham
+                dao.save_bill_for_user(phieu_kham[0][2], tien_thuoc, phieu_kham[0][5])
+                err_msg = "Thanh toán thành công"
+                return render_template("cashier.html", err_msg = err_msg, tien_kham=tien_kham)
+            # else:
+            #     tien_kham = 0
+            #     err_msg="BUG"
+            #     return render_template("cashier.html", err_msg=err_msg, tien_kham=tien_kham)
         else:
-            err_msg = "Không tồn tại phiếu khám này"
+            err_msg = "Không tồn tại phiếu khám này trong ngày hôm nay"
         # hd = dao.load_hoa_don_by_phieu_kham_id(phieuKham_id)
         # return redirect('/cashier')
 
@@ -380,8 +507,6 @@ def load_lich_su_benh():
     return {
         "load_lich_su_benh_in_view": load_lich_su_benh_in_view
     }
-
-
 
 
 if __name__ == '__main__':

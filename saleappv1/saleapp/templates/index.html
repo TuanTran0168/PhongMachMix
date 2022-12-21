@@ -21,7 +21,7 @@
                 <div class="card-body text-center">
                     <h4 class="card-title">Mã bệnh nhân: {{ current_user.id }}</h4>
                     <h4 class="card-title">{{ current_user.tenUser }}</h4>
-                     <h4 class="card-title">SĐT: {{ current_user.soDienThoai }}</h4>
+                    <h4 class="card-title">SĐT: {{ current_user.soDienThoai }}</h4>
                     <h4 class="card-title">Vai trò: {{ current_user.user_role.name }}</h4>
                     <h4 class="card-title">Ngày sinh: {{ current_user.ngaySinh }}</h4>
                     <h4 style="color: blue">ONLINE <i class="fas fa-toggle-on"></i></h4>
@@ -32,10 +32,17 @@
             <div class="content">
                 <strong>LƯU Ý:</strong>
                 <p>Lịch khám có hiệu lực sau khi có xác nhận từ chính thức từ Hệ thống phòng mạch IMPROOK.</p>
-                <p>Quý khách sử dụng dịch vụ đặt lịch khám trực tuyến, xin vui lòng đặt trước ít nhất là 48 giờ
-                    trước khi đến khám.</p>
-                <p>Trong trường hợp khẩn cấp hoặc nghi ngờ có các triệu chứng nguy hiểm, quý khách vui lòng ĐẾN TRỰC
-                    TIẾP Phòng khám hoặc các trung tâm y tế gần nhất để kịp thời xử lý.</p>
+                <p>Thời gian đăng ký khám <b>trực tuyến</b> sẽ bắt đầu vào lúc <b>5:00 AM</b> đến <b>9:00 AM</b> và sẽ
+                    bắt đầu khám bệnh vào lúc <b>1:00 PM</b>
+                    cùng ngày.</p>
+                <p>Những quý khách nào <b>không thể đăng ký khám trực tuyến</b> thì có thể đến trực tiếp tại phòng mạch
+                    <b>I'MPROOK</b> của
+                    chúng tôi để <b>được hỗ trợ đăng ký khám</b>.</p>
+                <p> Quý khách sử dụng dịch vụ đăng ký khám trực tuyến vui lòng <b>nắm rõ các lưu ý</b> để có trải nghiệm tốt
+                    nhất tại phòng khám của chúng tôi.</p>
+                <p>Trong trường hợp khẩn cấp hoặc nghi ngờ có các triệu chứng nguy hiểm, quý khách vui lòng <b>ĐẾN TRỰC
+                    TIẾP</b> Phòng khám hoặc các trung tâm y tế gần nhất để kịp thời xử lý.</p>
+
             </div>
         </div>
         <div class="user-right col-sm-5">

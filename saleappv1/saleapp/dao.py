@@ -199,18 +199,30 @@ def bill():
     return query.group_by(User.id, PhieuKham.id).order_by(User.id, PhieuKham.id).all()
 
 
+# def bill_for_one_user_by_id(user_id):
+#     query = db.session.query(User.id, User.tenUser, PhieuKham.id, PhieuKham.user_id,
+#                              func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc)) \
+#         .join(PhieuKham, PhieuKham.id.__eq__(ChiTietPhieuKham.phieuKham_id)) \
+#         .join(Thuoc, Thuoc.id.__eq__(ChiTietPhieuKham.Thuoc_id)) \
+#         .join(User, User.id.__eq__(PhieuKham.user_id))
+#
+#     query = query.filter(User.id.__eq__(user_id))
+#
+#     return query.group_by(User.id, PhieuKham.id).first()
+
 def bill_for_one_user_by_id(user_id):
     query = db.session.query(User.id, User.tenUser, PhieuKham.id, PhieuKham.user_id,
-                             func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc)) \
+                             func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc), PhieuKham.ngayKham) \
         .join(PhieuKham, PhieuKham.id.__eq__(ChiTietPhieuKham.phieuKham_id)) \
         .join(Thuoc, Thuoc.id.__eq__(ChiTietPhieuKham.Thuoc_id)) \
         .join(User, User.id.__eq__(PhieuKham.user_id))
 
     query = query.filter(User.id.__eq__(user_id))
+    today = datetime.now()
+    todayString = str(today)[0:10]
+    query = query.filter(PhieuKham.ngayKham.__eq__(todayString))
 
-    return query.group_by(User.id, PhieuKham.id).first()
-
-
+    return query.group_by(User.id, PhieuKham.id, PhieuKham.ngayKham).first()
 def save_bill_for_user(ngayKham, tongTien, user_id):
     b = HoaDon(ngayKham=ngayKham, tongTien=tongTien, user_id=user_id)
     db.session.add(b)
@@ -250,9 +262,9 @@ def load_hoa_don():
     today = datetime.now()
     todayString = str(today)[0:10]
     query = query.filter(HoaDon.ngayKham.__eq__(todayString))
+    query = query.filter(PhieuKham.ngayKham.__eq__(todayString))
 
-    return query.group_by(HoaDon.id, PhieuKham.ngayKham, PhieuKham.id, User.tenUser, HoaDon.ngayKham,
-                          HoaDon.tongTien).order_by(HoaDon.id).all()
+    return query.group_by(HoaDon.id, PhieuKham.id, User.tenUser, HoaDon.ngayKham, HoaDon.tongTien).order_by(HoaDon.id).all()
 
 
 # ====================================================================================
@@ -646,47 +658,51 @@ if __name__ == '__main__':
         # print("\nPhiếu khám\n")
         # print(load_phieu_kham(1))
 
-        # print(load_role_by_current_user_id())
+        # # print(load_role_by_current_user_id())
+        #
+        # user_id = 1  # Lấy id user bằng nhập trên web
+        # pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
+        # if pk_today_for_one_user:
+        #     user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
+        #     user_in_phieu_kham = load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
+        #     print(user_in_phieu_kham)
+        #
+        # # print(pk_today_for_one_user[0][0])
+        # print(load_thuoc_in_chi_tiet_phieu_kham_today(1))
+        # print(load_chi_tiet_danh_sach_kham_today(1))
+        # print(load_phieu_kham_today_by_phieu_kham_id(2))
+        # print(load_phieu_kham_today_by_phieu_kham_id(1))
+        # print(load_lich_su_benh(1))
+        #
+        # print(load_benh_id_by_ten_benh("Đau bụng")[0][0])
+        #
+        # print(load_hoa_don_by_phieu_kham_id(5))
+        #
+        # print("HoaDon.id, PhieuKham.id, User.tenUser, HoaDon.ngayKham, HoaDon.tongTien")
+        # print(load_hoa_don())
+        #
+        # print(load_phieu_kham())
+        # print(load_lich_su_benh_in_view(1))
+        #
+        # user_id = 1  # Lấy id user bằng nhập trên web
+        # pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
+        # if pk_today_for_one_user:
+        #     user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
+        #     print("id nè", user_id_in_phieu_kham)
+        #
+        # print(load_phieu_kham_id_today_by_phieu_kham_id(1)[0][0])
+        #
+        # print(load_phieu_kham_id_today_by_phieu_kham_id(1))
+        # print(load_users_by_user_id(1))
+        #
+        # print(load_thuoc_in_chi_tiet_phieu_kham_today(1)[0][0])
+        # print(load_hoa_don_by_phieu_kham_id(1)[0])
+        #
+        # print(load_lich_su_benh_in_view(10))
 
-        user_id = 1  # Lấy id user bằng nhập trên web
-        pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
-        if pk_today_for_one_user:
-            user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
-            user_in_phieu_kham = load_users_by_user_id(user_id_in_phieu_kham)  # Lấy user trong phiếu đó
-            print(user_in_phieu_kham)
-
-        # print(pk_today_for_one_user[0][0])
-        print(load_thuoc_in_chi_tiet_phieu_kham_today(1))
-        print(load_chi_tiet_danh_sach_kham_today(1))
-        print(load_phieu_kham_today_by_phieu_kham_id(2))
-        print(load_phieu_kham_today_by_phieu_kham_id(1))
-        print(load_lich_su_benh(1))
-
-        print(load_benh_id_by_ten_benh("Đau bụng")[0][0])
-
-        print(load_hoa_don_by_phieu_kham_id(5))
-
-        print("HoaDon.id, PhieuKham.id, User.tenUser, HoaDon.ngayKham, HoaDon.tongTien")
+        print(count_user_in_danh_sach_kham_today()[0][0])
         print(load_hoa_don())
-
-        print(load_phieu_kham())
-        print(load_lich_su_benh_in_view(1))
-
-        user_id = 1  # Lấy id user bằng nhập trên web
-        pk_today_for_one_user = load_phieu_kham_today_by_user_id(user_id)  # tìm phiếu khám của user đó
-        if pk_today_for_one_user:
-            user_id_in_phieu_kham = pk_today_for_one_user[0][5]  # Lấy id của user trong phiếu đó
-            print("id nè", user_id_in_phieu_kham)
-
-        print(load_phieu_kham_id_today_by_phieu_kham_id(1)[0][0])
-
-        print(load_phieu_kham_id_today_by_phieu_kham_id(1))
-        print(load_users_by_user_id(1))
-
-        print(load_thuoc_in_chi_tiet_phieu_kham_today(1)[0][0])
-        print(load_hoa_don_by_phieu_kham_id(1)[0])
-
-        print(load_lich_su_benh_in_view(10))
-
-        print(count_user_in_danh_sach_kham_today())
+        print(load_hoa_don_by_phieu_kham_id(5))
+        a = load_hoa_don_by_phieu_kham_id(5)
+        print(len(a))
 

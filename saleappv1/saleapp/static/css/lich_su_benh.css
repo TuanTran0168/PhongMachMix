@@ -25,3 +25,13 @@ div.content > div.user-left-img > img {
 div.content > h1 {
     text-align: center;
 }
+
+div.history {
+
+    height: 400px;
+    overflow: auto;
+}
+
+div.history > table.table {
+
+}
