@@ -18,6 +18,9 @@ def load_categories():
 def load_users():
     return User.query.all()
 
+def load_users_in_register():
+    query = db.session.query(User.id, User.tenUser, User.tenDangNhap)
+    return query.all()
 
 def load_users_by_phone_number(so_dien_thoai=None):
     query = db.session.query(User.id, User.tenUser, User.soDienThoai)
@@ -93,6 +96,8 @@ def count_user_by_role(userRoleStats):
 def count_user():
     return db.session.query(User.user_role, func.count(User.id)).group_by(User.user_role).all()
 
+def count_user_in_register():
+    return db.session.query(func.count(User.id)).all()
 
 def stats_revenue_by_user(kw=None, from_date=None, to_date=None):
     query = db.session.query(User.tenUser, PhieuKham.ngayKham, func.sum(ChiTietPhieuKham.soLuongThuoc * Thuoc.giaThuoc)) \
@@ -700,9 +705,12 @@ if __name__ == '__main__':
         #
         # print(load_lich_su_benh_in_view(10))
 
-        print(count_user_in_danh_sach_kham_today()[0][0])
-        print(load_hoa_don())
-        print(load_hoa_don_by_phieu_kham_id(5))
-        a = load_hoa_don_by_phieu_kham_id(5)
-        print(len(a))
+        # print(count_user_in_danh_sach_kham_today()[0][0])
+        # print(load_hoa_don())
+        # print(load_hoa_don_by_phieu_kham_id(5))
+        # a = load_hoa_don_by_phieu_kham_id(5)
+        # print(len(a))
+
+        print(count_user_in_register())
+        print(load_users_in_register())
 

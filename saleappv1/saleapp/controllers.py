@@ -48,6 +48,39 @@ def logout_my_user():
     return redirect('/login')
 
 
+# def register():
+#     err_msg = ''
+#     if request.method == 'POST':
+#         name = request.form['name']
+#         username = request.form['username']
+#         password = request.form['password']  # name cua html
+#         confirm = request.form['confirm']
+#
+#         birthday = request.form['birthday']
+#         gender = request.form['sex']
+#         telephone = request.form['telephone']
+#         address = request.form['address']
+#
+#         # return gender
+#
+#         if password.__eq__(confirm):
+#             avatar = ''
+#             if request.files:
+#                 res = cloudinary.uploader.upload(request.files['avatar'])
+#                 avatar = res['secure_url']
+#
+#             try:
+#                 dao.register(name=name, username=username, password=password, birthday=birthday, gender=int(gender),
+#                              telephone=telephone, address=address, avatar=avatar)
+#
+#                 return redirect('/login')
+#             except:
+#                 err_msg = 'Đã có lỗi xảy ra! Vui lòng quay lại sau!'
+#         else:
+#             err_msg = 'Mật khẩu KHÔNG khớp!'
+#
+#     return render_template('register.html', err_msg=err_msg)
+
 def register():
     err_msg = ''
     if request.method == 'POST':
@@ -70,10 +103,19 @@ def register():
                 avatar = res['secure_url']
 
             try:
-                dao.register(name=name, username=username, password=password, birthday=birthday, gender=int(gender),
-                             telephone=telephone, address=address, avatar=avatar)
+                danh_sach_user = dao.load_users_in_register()
+                # return str(danh_sach_user[0][2])
+                so_luong_user = dao.count_user_in_register()[0][0]
 
-                return redirect('/login')
+                for i in range(0, int(so_luong_user)):
+                    if str(danh_sach_user[i][2]).__eq__(username):
+                        err_msg = "Tên đăng nhập đã tồn tại"
+                        return render_template('register.html', err_msg=err_msg)
+                else:
+                    dao.register(name=name, username=username, password=password, birthday=birthday, gender=int(gender),
+                                 telephone=telephone, address=address, avatar=avatar)
+
+                    return redirect('/login')
             except:
                 err_msg = 'Đã có lỗi xảy ra! Vui lòng quay lại sau!'
         else:
