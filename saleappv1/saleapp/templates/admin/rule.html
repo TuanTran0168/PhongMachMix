@@ -23,4 +23,9 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+{% if err_msg %}
+<div class="alert alert-danger">
+    {{ err_msg }}
+</div>
+{% endif %}
 {% endblock %}

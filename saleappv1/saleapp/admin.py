@@ -147,6 +147,7 @@ class MyRuleView(RuleView):
                     err_msg = "Chưa nhập đủ"
                     file.write(json.dumps(quy_dinh))
                 #     ====================================================================
+            file.write(json.dumps(quy_dinh))
         return self.render('admin/rule.html', quy_dinh=quy_dinh, err_msg=err_msg)
 
 

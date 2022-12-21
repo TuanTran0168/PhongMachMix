@@ -118,8 +118,13 @@ def user_dang_ky_kham():
                                     dao.save_chi_tiet_danh_sach_kham(ngay_kham[0][0], benh_nhan[0][0])
                                     err_msg = 'Đăng ký thành công'
                                     lsb_for_one_user = dao.load_lich_su_benh(user_id=benh_nhan[0][0])
+                                    if lsb_for_one_user:
+                                        pass
+                                        # err_msg = "Lịch sử bệnh đã tồn tại"
+                                    else:
+                                        dao.create_lich_su_benh(user_id=benh_nhan[0][0])
                                 else:
-                                    err_msg = "Có lỗi xảy ra"
+                                    err_msg = "Chưa có danh sách để đăng ký"
                             else:
                                 err_msg = "Có lỗi xảy ra"
                         else:
